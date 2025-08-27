@@ -2,19 +2,52 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseNotFound
 from django.template.loader import render_to_string
 
+menu = [
+    {'title' : 'О центе', 'url_name' : 'about'},
+    {'title' : 'Услуги', 'url_name' : 'services'},
+    {'title' : 'Цены', 'url_name' : 'price_list'},
+    {'title' : 'Врачи', 'url_name' : 'doctors'},
+    {'title' : 'Новости', 'url_name' : 'news'},
+    {'title' : 'Контакты', 'url_name' : 'contacts'},
+    {'title' : 'Авторизация', 'url_name' : 'login'},
+]
+
+data_db = [
+    {'id' : 1, 'title' : 'Лазерная коррекция зрения', 'price' : 'от 1200 руб.', 'availability' : True},
+    {'id' : 2, 'title' : 'Лечение катаракты', 'price' : 'от 900 руб.', 'availability' : False},
+    {'id' : 3, 'title' : 'Диагностика', 'price' : 'от 70 руб.', 'availability' : True}
+]
 def main_page(request):
-    # t = render_to_string('Voka/main_page.html')
-    # return HttpResponse(t)
-    return render(request,'Voka/main_page.html')
+    data ={
+        'title':'Главная страница',
+        'menu': menu,
+        "services":data_db,
+        }
+    return render(request,'Voka/main_page.html', context = data)
 
 def services(request):
-    return render(request, 'Voka/services.html')
+    return render(request, 'Voka/services.html',{'title' : 'Услуги', 'menu' : menu})
 
-def services_by_id(request, serv_id):
-    return HttpResponse(f"<h1>Наши услуги</h1><p>id:{serv_id}</p>")
+def show_serv(request, serv_id):
+    return HttpResponse(f"Отображение услуг с id = {serv_id}")
 
-def services_by_slug(request, serv_slug):
-    return HttpResponse(f"<h1>Наши услуги</h1><p>slug:{serv_slug}</p>")
+def about(request):
+    return HttpResponse("О нас")
+
+def price_list(request):
+    return HttpResponse("Цены")
+
+def doctors(request):
+    return HttpResponse("Врачи")
+
+def news(request):
+    return HttpResponse("Новости")
+
+def login(request):
+    return HttpResponse("Авторизация")
+
+def contacts(request):
+    return HttpResponse("Контакты")
 
 def page_not_found(request, exception):
     return HttpResponseNotFound(render(request, 'Voka/page_not_found.html'))
