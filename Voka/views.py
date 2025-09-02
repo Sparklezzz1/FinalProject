@@ -17,6 +17,13 @@ data_db = [
     {'id' : 2, 'title' : 'Лечение катаракты', 'price' : 'от 900 руб.', 'availability' : False},
     {'id' : 3, 'title' : 'Диагностика', 'price' : 'от 70 руб.', 'availability' : True}
 ]
+
+serv_db = [
+    {'id': 1, 'name': 'Обследование'},
+    {'id': 2, 'name': 'Консультация'},
+    {'id': 3, 'name': 'Хирургия'},
+]
+
 def main_page(request):
     data ={
         'title':'Главная страница',
@@ -30,6 +37,9 @@ def services(request):
 
 def show_serv(request, serv_id):
     return HttpResponse(f"Отображение услуг с id = {serv_id}")
+
+def show_stock(request, stock_id):
+    return HttpResponse(f"Отображение акции с id = {stock_id}")
 
 def about(request):
     return HttpResponse("О нас")

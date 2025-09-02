@@ -11,4 +11,5 @@ urlpatterns = [
     path('login/', views.login, name = "login"),
     path('contacts/', views.contacts, name = "contacts"),
     path('serv/<int:serv_id>/', views.show_serv, name = "serv"),
+    path('stock/<int:stock_id>/', views.show_stock, name = "stock"),
 ]

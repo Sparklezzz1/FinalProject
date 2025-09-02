@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
+{% load voka_tags %}
 
-{% block content %}
+{% block body %}
 <h1>{{ title }}</h1>
 <ul>
     {% for s in services %}
@@ -8,7 +9,7 @@
     <li>
         <h2>{{ s.title }}</h2>
         <p>{{ s.price }}</p>
-        <p><a href="{% url 'serv' s.id %}">Ознакомиться с услугой</a></p>
+        <p><a href="{% url 'stock' s.id %}">Ознакомиться с услугой</a></p>
     </li>
     {% if not forloop.last %}
     <hr>
@@ -16,5 +17,7 @@
     {% endif %}
     {% endfor %}
 </ul>
-
+<ul>
+{% show_services %}
+</ul>
 {% endblock %}

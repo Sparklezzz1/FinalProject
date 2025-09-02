@@ -1,7 +1,8 @@
+{% load static %}
 <!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
-    <title>{{ title }}</title>
+    <title>{{title}}</title>
 </head>
 <body>
 <ul>
@@ -12,7 +13,7 @@
     </li> 
     {% endfor %}
 </ul>
-{% block content %}{% endblock%}
+{% block body %} {% endblock%}
 
 </body>
 </html>
