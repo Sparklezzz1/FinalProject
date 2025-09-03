@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Voka',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
