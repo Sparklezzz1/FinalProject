@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseNotFound
 from django.template.loader import render_to_string
+from .models import Services
 
 menu = [
     {'title' : 'О центе', 'url_name' : 'about'},
@@ -12,11 +13,6 @@ menu = [
     {'title' : 'Авторизация', 'url_name' : 'login'},
 ]
 
-data_db = [
-    {'id' : 1, 'title' : 'Лазерная коррекция зрения', 'price' : 'от 1200 руб.', 'availability' : True},
-    {'id' : 2, 'title' : 'Лечение катаракты', 'price' : 'от 900 руб.', 'availability' : False},
-    {'id' : 3, 'title' : 'Диагностика', 'price' : 'от 70 руб.', 'availability' : True}
-]
 
 serv_db = [
     {'id': 1, 'name': 'Обследование'},
@@ -28,12 +24,12 @@ def main_page(request):
     data ={
         'title':'Главная страница',
         'menu': menu,
-        "services":data_db,
+        'services': Services.objects.all(),
         }
     return render(request,'Voka/main_page.html', context = data)
 
 def services(request):
-    return render(request, 'Voka/services.html',{'title' : 'Услуги', 'menu' : menu})
+    return render(request, 'Voka/services.html',{'title' : 'Услуги', 'menu' : menu, 'services': Services.objects.all()},)
 
 def show_serv(request, serv_id):
     return HttpResponse(f"Отображение услуг с id = {serv_id}")
