@@ -9,7 +9,7 @@
 <ul class="list-inline">
   <li class="list-group-item">{{ s.title }}</li>
   <li class="list-group-item">{{ s.price }}</li>
-  <li class="list-group-item"><a href="{% url 'stock' s.id %}">Ознакомиться с услугой</a></li>
+  <li class="list-group-item"><a href="{{ s.get_asolute_url }}">Ознакомиться с услугой</a></li>
     {% endif %}
     {% endfor %}
 </ul>
