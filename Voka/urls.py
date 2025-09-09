@@ -11,5 +11,5 @@ urlpatterns = [
     path('login/', views.login, name = "login"),
     path('contacts/', views.contacts, name = "contacts"),
     path('serv/<slug:serv_slug>/', views.show_serv, name = "serv"),
-    path('stock/<int:stock_id>/', views.show_stock, name = "stock"),
+    path('direction/<slug:direction_slug>/', views.show_direction, name='show_direction'),
 ]

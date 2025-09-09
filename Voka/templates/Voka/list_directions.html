@@ -1,0 +1,9 @@
+<ul>
+{% for dir in dirs %}
+    {% if dir.id == dir_selected %}
+        <li>{{ dir.name }}</li>
+    {% else %}
+        <li><a href="{{ dir.get_absolute_url }}">{{ dir.name }}</a></li>
+    {% endif %}
+{% endfor %}
+</ul>

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block body %}
+{% block content %}
 <h1>{{ title }}</h1>
 
 <table class="table table-bordered">
@@ -9,16 +9,16 @@
         <th scope="col">Название</th>
         <th scope="col">Цена</th>
         <th scope="col">Описание</th>
+        <th scope="col">Тип Услуги</th>
     </tr>
     {% for item in services %}
-    {% if item.availability %}
     <tr scope="row">
         <td>{{ item.id }}</td>
         <td>{{ item.title }}</td>
         <td>{{ item.price }}</td>
         <td>{{ item.content }}</td>
+        <td>{{ item.direction }}</td>
     </tr>
-    {% endif %}
     {% endfor %}
 </table>
 {% endblock %}

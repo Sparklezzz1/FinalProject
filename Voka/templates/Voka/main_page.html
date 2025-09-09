@@ -1,20 +1,17 @@
 {% extends 'base.html' %}
 {% load voka_tags %}
 
-{% block body %}
+{% block content %}
 <h1>{{ title }}</h1>
 <ul>
     {% for s in services %}
-    {% if s.availability %}
-<ul class="list-inline">
+  <ul class="list-inline">
   <li class="list-group-item">{{ s.title }}</li>
   <li class="list-group-item">{{ s.price }}</li>
+  <li class="list-group-item">{{ s.direction }}</li>
   <li class="list-group-item"><a href="{{ s.get_asolute_url }}">Ознакомиться с услугой</a></li>
-    {% endif %}
     {% endfor %}
 </ul>
+{% show_directions dir_selected %}
 
-<ul>
-{% show_services %}
-</ul>
 {% endblock %}

@@ -1,7 +1,0 @@
-{% for serv in servs %}
-{% if serv.id == serv_selected %}
-<li>{{serv.name}}</li>
-{% else %}
-<li><a href="{% url 'serv' serv.id %}">{{serv.name}}</a></li>
-{% endif %}
-{% endfor %}
