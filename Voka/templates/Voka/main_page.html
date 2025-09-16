@@ -9,9 +9,8 @@
   <li class="list-group-item">{{ s.title }}</li>
   <li class="list-group-item">{{ s.price }}</li>
   <li class="list-group-item">{{ s.direction }}</li>
-  <li class="list-group-item"><a href="{{ s.get_asolute_url }}">Ознакомиться с услугой</a></li>
+  <li class="list-group-item"><a href="{{ s.get_absolute_url }}">Ознакомиться с услугой</a></li>
     {% endfor %}
 </ul>
-{% show_directions dir_selected %}
 
 {% endblock %}

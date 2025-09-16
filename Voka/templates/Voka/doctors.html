@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>{{ title }}</h1>
+<table class="table table-bordered">
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Имя</th>
+        <th scope="col">Фамилия</th>
+        <th scope="col">Отчествол</th>
+        <th scope="col">Опыт работы</th>
+        <th scope="col">Должность</th>
+    </tr>
+    {% for item in doctors %}
+    <tr scope="row">
+        <td>{{ item.id }}</td>
+        <td>{{ item.name }}</td>
+        <td>{{ item.surname }}</td>
+        <td>{{ item.patronymic }}</td>
+        <td>{{ item.experience }}</td>
+        <td>{{ item.job_title }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

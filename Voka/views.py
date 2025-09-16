@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseNotFound
 from django.template.loader import render_to_string
-from .models import Direction, Services
+from .models import Direction, Services, Doctors
 
 menu = [
     {'title' : 'О центре', 'url_name' : 'about'},
@@ -15,7 +15,7 @@ menu = [
 
 
 def main_page(request):
-    services = Services.is_availability.all()
+    services = Services.objects.filter(availability = Services.Status.PUBLISHED)
     data ={
         'title':'Главная страница',
         'menu': menu,
@@ -34,7 +34,6 @@ def show_serv(request, serv_slug):
         'title' : serv.title,
         'menu' : menu,
         'serv' : serv,
-
     }
     return render(request,'Voka/serv.html', data)
 
@@ -50,15 +49,15 @@ def show_direction(request, direction_slug):
     }
     return render(request, 'Voka/main_page.html', context=data)
 
+def doctors(request):
+    doctors = Doctors.objects.filter()
+    return render(request, 'Voka/doctors.html',{'title' : 'Врачи', 'menu' : menu, 'doctors': doctors})
 
 def about(request):
     return HttpResponse("О нас")
 
 def price_list(request):
     return HttpResponse("Цены")
-
-def doctors(request):
-    return HttpResponse("Врачи")
 
 def news(request):
     return HttpResponse("Новости")

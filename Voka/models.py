@@ -11,14 +11,15 @@ class Services(models.Model):
         DRAFT = 0, "Услуга не доступна"
         PUBLISHED = 1, "Услуга доступна"
 
-    title = models.CharField(max_length=255)
+    title = models.CharField(verbose_name="Услуга", max_length=255)
     slug = models.SlugField(max_length=255, unique=True, db_index=True)
-    content = models.TextField(blank=True)
-    price = models.FloatField(null=True, blank=True)
-    time_create=models.DateTimeField(auto_now_add=True)
-    time_update=models.DateTimeField(auto_now=True)
-    availability = models.IntegerField(choices=Status.choices, default=Status.PUBLISHED)
+    content = models.TextField(verbose_name="Описание",blank=True)
+    price = models.FloatField(verbose_name="Стоимость",null=True, blank=True)
+    time_create=models.DateTimeField(verbose_name="Время создания",auto_now_add=True)
+    time_update=models.DateTimeField(verbose_name="Время изменения",auto_now=True)
+    availability = models.IntegerField(verbose_name="Доступность услуги",choices=Status.choices, default=Status.PUBLISHED)
     direction = models.ForeignKey('Direction', on_delete=models.PROTECT)
+    doctors = models.ManyToManyField('Doctors', blank=True,related_name="services")
 
     objects = models.Manager()
     is_availability = AvailabilityManager()
@@ -38,4 +39,15 @@ class Direction(models.Model):
     
     def get_absolute_url(self):
         return reverse('show_direction', kwargs={'direction_slug':self.slug})
+    
+class Doctors(models.Model):
+    name = models.CharField(verbose_name="Имя",max_length=255,db_index=True)
+    surname = models.CharField(verbose_name="Фамилия",max_length=255)
+    patronymic = models.CharField(verbose_name="Отчество",max_length=255)
+    job_title = models.CharField(verbose_name="Должность",max_length=255,null=True,blank=True)
+    experience = models.IntegerField(verbose_name="Стаж работы", default=0,)
+    slug = models.SlugField(max_length=255,unique=True,db_index=True)
+
+    def __str__(self):
+        return self.name
     
