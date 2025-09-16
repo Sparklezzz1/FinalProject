@@ -1,0 +1,12 @@
+{% if docs %}
+<div class="mb-4">
+    <h5>Врачи:</h5>
+    <ul class="list-group">
+        {% for d in docs %}
+        <li class="list-group-item">
+            <a href="{% url 'services' %}?doctor={{ d.slug }}">{{ d.name }} {{ d.surname }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}

@@ -24,16 +24,30 @@ def main_page(request):
     return render(request,'Voka/main_page.html', context = data)
 
 def services(request):
-    services = Services.objects.filter(availability = Services.Status.PUBLISHED)
-    return render(request, 'Voka/services.html',{'title' : 'Услуги', 'menu' : menu, 'services': services})
+    services = Services.objects.filter(availability=Services.Status.PUBLISHED)
+    doc_slug = request.GET.get('doctor')
+    if doc_slug:
+        selected_doc = get_object_or_404(Doctors, slug=doc_slug)
+        services = services.filter(doctors=selected_doc)
+    else:
+        selected_doc = None
+
+    context = {
+        'title': 'Услуги',
+        'menu': menu,
+        'services': services,
+        'selected_doc': selected_doc,
+    }
+    return render(request, 'Voka/services.html', context)
 
 def show_serv(request, serv_slug):
-    
     serv = get_object_or_404(Services, slug = serv_slug)
+    doctors = serv.doctors.all()
     data = {
         'title' : serv.title,
         'menu' : menu,
         'serv' : serv,
+         'doctors': doctors,
     }
     return render(request,'Voka/serv.html', data)
 
@@ -52,6 +66,16 @@ def show_direction(request, direction_slug):
 def doctors(request):
     doctors = Doctors.objects.filter()
     return render(request, 'Voka/doctors.html',{'title' : 'Врачи', 'menu' : menu, 'doctors': doctors})
+
+def show_docs(request, doc_slug):
+    doc = get_object_or_404(Doctors, slug = doc_slug)
+    services = doc.services.filter()
+    data = {
+        'title': f'Врач: {doc.name}',
+        'menu': menu,
+        'services': services,  
+    }
+    return render(request, 'Voka/doctors.html',context = data)
 
 def about(request):
     return HttpResponse("О нас")
