@@ -37,8 +37,6 @@ class Direction(models.Model):
     def __str__(self):
         return self.name
     
-    def get_absolute_url(self):
-        return reverse('show_direction', kwargs={'direction_slug':self.slug})
     
 class Doctors(models.Model):
     name = models.CharField(verbose_name="Имя",max_length=255,db_index=True)
@@ -50,6 +48,3 @@ class Doctors(models.Model):
 
     def __str__(self):
         return self.name
-    
-    def get_absolute_url(self):
-        return reverse('show_docs', kwargs={'doc_slug':self.slug})

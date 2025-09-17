@@ -25,6 +25,7 @@ def main_page(request):
 
 def services(request):
     services = Services.objects.filter(availability=Services.Status.PUBLISHED)
+
     doc_slug = request.GET.get('doctor')
     if doc_slug:
         selected_doc = get_object_or_404(Doctors, slug=doc_slug)
@@ -32,11 +33,18 @@ def services(request):
     else:
         selected_doc = None
 
+    dir_slug = request.GET.get('directions')
+    if dir_slug:
+        selected_dir = get_object_or_404(Direction, slug=dir_slug)
+        services = services.filter(direction=selected_dir)
+    else:
+        selected_dir = None
     context = {
         'title': 'Услуги',
         'menu': menu,
         'services': services,
         'selected_doc': selected_doc,
+        'selected_dir': selected_dir,
     }
     return render(request, 'Voka/services.html', context)
 

@@ -1,8 +1,12 @@
-<ul>
-{% for dir in dirs %}
-    {% if dir.id == dir_selected %}
-    {% else %}
-        <li><a href="{{ dir.get_absolute_url }}">{{ dir.name }}</a></li>
-    {% endif %}
+{% if dirs %}
+<div class="mb-4">
+    <div class="d-grid gap-2">
+        {% for dir in dirs %}
+        <a href="{% url 'services' %}?directions={{ dir.slug }}"
+            class="btn btn-outline-primary">
+            {{ dir.name }}
+        </a>
 {% endfor %}
-</ul>
+    </div>
+</div>
+{% endif %}

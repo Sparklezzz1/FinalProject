@@ -1,12 +1,12 @@
 {% if docs %}
 <div class="mb-4">
-    <h5>Врачи:</h5>
-    <ul class="list-group">
+    <div class="d-grid gap-2">
         {% for d in docs %}
-        <li class="list-group-item">
-            <a href="{% url 'services' %}?doctor={{ d.slug }}">{{ d.name }} {{ d.surname }}</a>
-        </li>
+        <a href="{% url 'services' %}?doctor={{ d.slug }}"
+           class="btn btn-outline-primary">
+            {{ d.name }} {{ d.surname }}
+        </a>
         {% endfor %}
-    </ul>
+    </div>
 </div>
 {% endif %}
