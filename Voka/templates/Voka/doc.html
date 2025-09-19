@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h2 class="card-title mb-3">{{ doc.surname }} {{ doc.name }} {{ doc.patronymic }}</h2>
+            
+            {% if doc.job_title %}
+                <h5 class="text-muted mb-3">{{ doc.job_title }}</h5>
+            {% endif %}
+            
+            <p><strong>Стаж:</strong> {{ doc.experience }} лет</p>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <h4>Услуги врача</h4>
+        <ul class="list-group">
+            {% for s in doc.services.all %}
+                <li class="list-group-item">
+                    <a href="{{ s.get_absolute_url }}" class="text-decoration-none">
+                        {{ s.title }}
+                    </a>
+                </li>
+            {% empty %}
+                <li class="list-group-item text-muted">У этого врача пока нет услуг</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

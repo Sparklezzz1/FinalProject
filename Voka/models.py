@@ -47,4 +47,7 @@ class Doctors(models.Model):
     slug = models.SlugField(max_length=255,unique=True,db_index=True)
 
     def __str__(self):
-         return f"{self.surname} {self.name} {self.patronymic}"
+         return f"{self.surname} {self.name} {self.patronymic}"\
+         
+    def get_absolute_url(self):
+        return reverse('doc', kwargs={'doc_slug' : self.slug})
