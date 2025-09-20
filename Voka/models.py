@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.core.validators import RegexValidator
 
 class AvailabilityManager(models.Manager):
     def get_queryset(self):
@@ -47,7 +48,38 @@ class Doctors(models.Model):
     slug = models.SlugField(max_length=255,unique=True,db_index=True)
 
     def __str__(self):
-         return f"{self.surname} {self.name} {self.patronymic}"\
+         return f"{self.surname} {self.name} {self.patronymic}"
          
     def get_absolute_url(self):
         return reverse('doc', kwargs={'doc_slug' : self.slug})
+    
+
+class Appointment(models.Model):
+    STATUS_CHOICES = [
+        ('new', 'Новая'),
+        ('confirmed', 'Подтверждена'),
+        ('canceled', 'Отменена'),
+        ('done', 'Завершена'),
+    ]
+    patient_name = models.CharField(verbose_name="Имя пациента", max_length=255, db_index=True)
+    patient_surname = models.CharField(verbose_name="Фамилия пациента", max_length=255, db_index=True)
+    doctor = models.ForeignKey("Doctors", on_delete=models.CASCADE, related_name="appointments")
+    date = models.DateField(verbose_name="Дата приема", db_index=True)
+    time = models.TimeField(verbose_name="Время приёма", db_index=True)
+    reason = models.TextField(verbose_name="Причина визита", blank=True, null=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='new')
+    phone = models.CharField(verbose_name="Номер телефона",max_length=13,
+        validators=[
+            RegexValidator(
+                regex=r'^\+375(?:25|29|33|44|17)\d{7}$',
+                message="Введите корректный номер телефона"
+            )
+        ],
+    )
+
+    class Meta:
+        unique_together = ('doctor', 'date', 'time')
+        ordering = ['-date', '-time']
+
+    def __str__(self):
+        return f"{self.patient_surname} {self.patient_name} : {self.doctor} ({self.date} {self.time})"
