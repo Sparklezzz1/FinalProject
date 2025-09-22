@@ -1,3 +1,8 @@
 from django import forms
+from .models.appointment import Appointment
 
-class 
+class AppointmentForm(forms.ModelForm):
+    class Meta:
+        model = Appointment
+        exclude = ("status",)
+

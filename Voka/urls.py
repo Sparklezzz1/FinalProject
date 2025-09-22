@@ -12,4 +12,5 @@ urlpatterns = [
     path('login/', views.login, name="login"),
     path('contacts/', views.contacts, name="contacts"),
     path('serv/<slug:serv_slug>/', views.show_serv, name="serv"),
+    path('appointment/', views.appointment, name = "appointment")
 ]

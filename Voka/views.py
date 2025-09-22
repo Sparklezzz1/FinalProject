@@ -1,6 +1,10 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseNotFound
-from .models import Direction, Services, Doctors
+from .models.services import Services
+from .models.services import Direction
+from .models.doctors import Doctors
+from .models.appointment import Appointment
+from .forms import AppointmentForm
 
 menu = [
     {'title': 'О центре', 'url_name': 'about'},
@@ -10,6 +14,7 @@ menu = [
     {'title': 'Новости', 'url_name': 'news'},
     {'title': 'Контакты', 'url_name': 'contacts'},
     {'title': 'Авторизация', 'url_name': 'login'},
+    {'title': 'Запись на прием', 'url_name': 'appointment'},
 ]
 
 
@@ -100,6 +105,9 @@ def about(request):
         'menu': menu,
     })
 
+def appointment(request):
+    form = AppointmentForm()
+    return render(request, "Voka/appointment.html",{'title':"Запись на прием",'menu':menu,'form':form})
 
 def price_list(request):
     return HttpResponse("Цены")

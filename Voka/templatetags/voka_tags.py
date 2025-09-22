@@ -1,5 +1,7 @@
 from django import template
-from Voka.models import Direction, Services, Doctors
+from django.contrib import admin
+from Voka.models.services import Direction
+from Voka.models.doctors import Doctors
 
 register = template.Library()
 
