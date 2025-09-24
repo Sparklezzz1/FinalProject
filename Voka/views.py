@@ -1,10 +1,14 @@
-from django.shortcuts import get_object_or_404, render
+from django.contrib import messages
+from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse, HttpResponseNotFound
+from django.urls import reverse_lazy
 from .models.services import Services
 from .models.services import Direction
 from .models.doctors import Doctors
 from .models.appointment import Appointment
 from .forms import AppointmentForm
+from django.views.generic.edit import CreateView
+
 
 menu = [
     {'title': 'О центре', 'url_name': 'about'},
@@ -106,7 +110,14 @@ def about(request):
     })
 
 def appointment(request):
-    form = AppointmentForm()
+    if request.method == 'POST':
+        form = AppointmentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Заявка успешно отправлена!')
+            return redirect('main_page')
+    else:
+        form = AppointmentForm()
     return render(request, "Voka/appointment.html",{'title':"Запись на прием",'menu':menu,'form':form})
 
 def price_list(request):
