@@ -1,5 +1,6 @@
 from django import forms
 from .models.appointment import Appointment
+from .models.services import Services
 from django.forms.widgets import DateInput
 
 class AppointmentForm(forms.ModelForm):
@@ -30,3 +31,12 @@ class AppointmentForm(forms.ModelForm):
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
 
+class ServicesForm(forms.ModelForm):
+    class Meta:
+        model = Services
+        fields = '__all__'
+        exclude = ("slug",)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'

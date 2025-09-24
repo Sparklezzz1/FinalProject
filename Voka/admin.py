@@ -9,3 +9,5 @@ admin.site.register(Services)
 admin.site.register(Doctors)
 admin.site.register(Direction)
 admin.site.register(Appointment)
+class ServicesAdmin(admin.ModelAdmin):
+    prepopulated_fields = {"slug": ("title",)}

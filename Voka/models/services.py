@@ -1,5 +1,7 @@
 from django.db import models
 from django.urls import reverse
+from django.utils.text import slugify
+from slugify import slugify
 
 class Services(models.Model):
     class Status(models.IntegerChoices):
@@ -13,10 +15,15 @@ class Services(models.Model):
     time_create=models.DateTimeField(verbose_name="Время создания",auto_now_add=True)
     time_update=models.DateTimeField(verbose_name="Время изменения",auto_now=True)
     availability = models.IntegerField(verbose_name="Доступность услуги",choices=Status.choices, default=Status.PUBLISHED)
-    direction = models.ForeignKey('Direction', on_delete=models.PROTECT)
-    doctors = models.ManyToManyField('Voka.Doctors', blank=True,related_name="services")
+    direction = models.ForeignKey('Direction',verbose_name="Направление", on_delete=models.PROTECT)
+    doctors = models.ManyToManyField('Voka.Doctors',verbose_name="Время создания", blank=True,related_name="services")
 
     objects = models.Manager()
+
+    def save(self, *args, **kwargs):
+        if not self.slug: 
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title

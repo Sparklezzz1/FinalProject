@@ -6,19 +6,19 @@ from .models.services import Services
 from .models.services import Direction
 from .models.doctors import Doctors
 from .models.appointment import Appointment
-from .forms import AppointmentForm
+from .forms import AppointmentForm,ServicesForm
 from django.views.generic.edit import CreateView
 
 
 menu = [
     {'title': 'О центре', 'url_name': 'about'},
     {'title': 'Услуги', 'url_name': 'services'},
-    {'title': 'Цены', 'url_name': 'price_list'},
     {'title': 'Врачи', 'url_name': 'doctors'},
     {'title': 'Новости', 'url_name': 'news'},
     {'title': 'Контакты', 'url_name': 'contacts'},
     {'title': 'Авторизация', 'url_name': 'login'},
     {'title': 'Запись на прием', 'url_name': 'appointment'},
+    {'title': 'Создание услуги', 'url_name': 'services_create'},
 ]
 
 
@@ -60,6 +60,41 @@ def services(request):
         'selected_doc': selected_doc,
         'selected_dir': selected_dir,
     })
+
+
+def services_create(request):
+    if request.method == 'POST':
+        form = ServicesForm(request.POST) 
+        if form.is_valid():
+            form.save()
+            return redirect('services')
+    else:
+        form = ServicesForm()
+    return render(request, 'Voka/services_form.html', {'form': form,'title':"Создание услуги",'menu':menu,})
+
+
+def service_delete(request, pk):
+    service = get_object_or_404(Services, pk=pk)
+    
+    if request.method == "POST":
+        service.delete()
+        messages.success(request, f'Услуга "{service.title}" успешно удалена.')
+        return redirect('services')
+
+    return render(request, 'Voka/services_del.html', {'service': service})
+
+def service_edit(request, service_id):
+    service = get_object_or_404(Services, id=service_id)
+    
+    if request.method == 'POST':
+        form = ServicesForm(request.POST, instance=service)
+        if form.is_valid():
+            form.save()
+            return redirect('services')  
+    else:
+        form = ServicesForm(instance=service)
+    
+    return render(request, 'VOka/services_edit.html', {'form': form, 'service': service})
 
 
 def show_serv(request, serv_slug):
@@ -109,6 +144,7 @@ def about(request):
         'menu': menu,
     })
 
+
 def appointment(request):
     if request.method == 'POST':
         form = AppointmentForm(request.POST)
@@ -119,9 +155,6 @@ def appointment(request):
     else:
         form = AppointmentForm()
     return render(request, "Voka/appointment.html",{'title':"Запись на прием",'menu':menu,'form':form})
-
-def price_list(request):
-    return HttpResponse("Цены")
 
 
 def news(request):

@@ -29,6 +29,10 @@ ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
+TEXT_SLUGIFY_BACKENDS = [
+            "slugify.backends.django.DjangoBackend",
+            "slugify.backends.text_slugify.TextSlugifyBackend",
+        ]
 
 INSTALLED_APPS = [
     'django.contrib.admin',

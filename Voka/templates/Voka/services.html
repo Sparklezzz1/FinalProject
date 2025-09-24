@@ -24,44 +24,60 @@
             </div>
         </div>
     </div>
- <div class="col-12 col-md-9">
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        {% for item in services %}
-        <div class="col">
-            <div class="card h-100 shadow-sm d-flex flex-column">
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title">{{ item.title }}</h5>
 
-                    {% if item.price %}
-                    <p class="card-text"><strong>Цена:</strong> {{ item.price }} BYN</p>
-                    {% endif %}
+    <div class="col-12 col-md-9">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for item in services %}
+            <div class="col">
+                <div class="card h-100 shadow-sm d-flex flex-column">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ item.title }}</h5>
 
-                    {% if item.content %}
-                    <p class="card-text">{{ item.content|truncatewords:10 }}</p>
-                    {% endif %}
+                        {% if item.price %}
+                        <p class="card-text"><strong>Цена:</strong> {{ item.price }} BYN</p>
+                        {% endif %}
 
-                    <p class="card-text"><strong>Направление:</strong> {{ item.direction }}</p>
+                        {% if item.content %}
+                        <p class="card-text">{{ item.content|truncatewords:10 }}</p>
+                        {% endif %}
 
-                    {% if item.doctors.all %}
-                    <p class="fw-bold mb-1">Врачи, оказывающие услугу:</p>
-                    <ul class="list-group list-group-flush mb-2 flex-grow-0">
-                        {% for doc in item.doctors.all %}
-                        <li class="list-group-item py-1">
-                            <a href="{{ doc.get_absolute_url }}">{{ doc.name }} {{ doc.surname }}</a>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                    {% else %}
-                    <p>Врачи не назначены</p>
-                    {% endif %}
+                        <p class="card-text"><strong>Направление:</strong> {{ item.direction }}</p>
 
-                    <div class="mt-auto">
-                        <a href="{{ item.get_absolute_url }}" class="btn btn-primary w-100">Подробнее</a>
+                        {% if item.doctors.exists %}
+                        <p class="fw-bold mb-1">Врачи, оказывающие услугу:</p>
+                        <ul class="list-group list-group-flush mb-2 flex-grow-0">
+                            {% for doc in item.doctors.all %}
+                            <li class="list-group-item py-1">
+                                {% if doc.get_absolute_url %}
+                                    <a href="{{ doc.get_absolute_url }}">{{ doc.name }} {{ doc.surname }}</a>
+                                {% else %}
+                                    {{ doc.name }} {{ doc.surname }}
+                                {% endif %}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <p>Врачи не назначены</p>
+                        {% endif %}
+
+                        <div class="mt-auto d-flex flex-column gap-2">
+                            {% if item.get_absolute_url %}
+                                <a href="{{ item.get_absolute_url }}" class="btn btn-primary w-100">Подробнее</a>
+                            {% else %}
+                                <span class="btn btn-secondary w-100 disabled">Подробнее</span>
+                            {% endif %}
+
+                           <a href="{% url 'service_edit' item.pk %}" class="btn btn-warning w-100 mt-2">Редактировать</a>
+                           <a href="{% url 'service_delete' item.pk %}" class="btn btn-danger w-100 mt-2">Удалить</a>
+                           
+                        </div>
+
                     </div>
                 </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
 </div>
+
 {% endblock %}
