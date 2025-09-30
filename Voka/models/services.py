@@ -8,6 +8,10 @@ class Services(models.Model):
         DRAFT = 0, "Услуга не доступна"
         PUBLISHED = 1, "Услуга доступна"
 
+    class OnSale(models.IntegerChoices):
+        SALENO = 0, "Скидки нет"
+        SALEYES = 1, "Скидка"
+
     title = models.CharField(verbose_name="Услуга", max_length=255)
     slug = models.SlugField(max_length=255, unique=True, db_index=True)
     content = models.TextField(verbose_name="Описание",blank=True)
@@ -17,8 +21,14 @@ class Services(models.Model):
     availability = models.IntegerField(verbose_name="Доступность услуги",choices=Status.choices, default=Status.PUBLISHED)
     direction = models.ForeignKey('Direction',verbose_name="Направление", on_delete=models.PROTECT)
     doctors = models.ManyToManyField('Voka.Doctors',verbose_name="Время создания", blank=True,related_name="services")
-
+    on_sale = models.IntegerField(verbose_name="На акции",choices=OnSale.choices, default=OnSale.SALENO)
+    sale_price = models.FloatField(verbose_name="Размер скидки",null=True, blank=True)
     objects = models.Manager()
+
+    def final_price(self):
+        if self.sale_price:
+            return self.price - self.sale_price
+        return self.price
 
     def save(self, *args, **kwargs):
         if not self.slug: 

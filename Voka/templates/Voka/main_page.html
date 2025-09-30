@@ -2,14 +2,21 @@
 {% block content %}
 {% load voka_tags %}
 <h1 class="mb-4">{{ title }}</h1>
-
+<div class="h3"> Сейчас на скидке</div>
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+
     {% for s in services %}
+    {% if s.on_sale == SALEYES %}
     <div class="col">
         <div class="card h-100 shadow-sm">
             <div class="card-body">
                 <h5 class="card-title">{{ s.title }}</h5>
-                {% if s.price %}
+                {% if s.sale_price %}
+                <p class="card-text text-danger">
+                    <strong>Цена со скидкой:</strong> {{ s.final_price }} BYN
+                </p>
+                <p class="text-muted text-decoration-line-through">{{ s.price }} BYN</p>
+                {% else %}
                 <p class="card-text"><strong>Стоимость:</strong> {{ s.price }} BYN</p>
                 {% endif %}
                 <p class="card-text"><strong>Направление:</strong> {{ s.direction }}</p>
@@ -31,6 +38,27 @@
             </div>
         </div>
     </div>
+    {% endif %}
+    {% endfor %}
+</div>
+
+<hr class="my-5">
+
+<div class="h3"> Наши врачи</div>
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    {% for d in doctors %}
+    {% if d.manager == YES %}
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title"><strong>Имя:</strong> {{ d.surname }} {{ d.name }} {{ d.patronymic }}</h5>
+                <p class="card-text"><strong>Должность:</strong> {{ d.job_title }}</p>
+                <p class="card-text"><strong>Опыт работы:</strong> {{ d.experience }} Лет</p>
+                <a href="{{ d.get_absolute_url }}" class="btn btn-primary mt-2">Подробнее</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
     {% endfor %}
 </div>
 {% endblock %}

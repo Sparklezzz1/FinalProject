@@ -133,3 +133,9 @@ STATIC_ROOT =  'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/profile/'
+LOGOUT_REDIRECT_URL = '/'
+AUTHENTICATION_BACKENDS = [ 'django.contrib.auth.backends.ModelBackend' ] 

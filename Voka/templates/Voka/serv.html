@@ -6,8 +6,13 @@
         <div class="card-body">
             <h2 class="card-title">{{ serv.title }}</h2>
 
-            {% if serv.price %}
-                <p class="fs-5 mt-2"><strong>Стоимость:</strong> {{ serv.price }} ₽</p>
+            {% if serv.sale_price %}
+                <p class="card-text text-danger">
+                    <strong>Цена со скидкой:</strong> {{ serv.final_price }} BYN
+                </p>
+                <p class="text-muted text-decoration-line-through">{{ serv.price }} BYN</p>
+                {% else %}
+                <p class="card-text"><strong>Стоимость:</strong> {{ serv.price }} BYN</p>
             {% endif %}
 
             {% if serv.direction %}

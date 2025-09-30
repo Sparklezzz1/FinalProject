@@ -7,7 +7,12 @@
     {% csrf_token %}
     {{ form.as_p }} 
     
-    <button type="submit">Сохранить изменения</button>
-    <a href="{% url 'services' %}">Отмена</a>
+    <button type="submit" class="btn btn-primary btn-sm w-100 mb-3">
+            Сохранить изменения
+    </button>
+    <button type="submit" class="btn btn-danger btn-primary btn-sm w-100 mb-3">
+            <a class="text-white" href="{% url 'services' %}">Отмена</a>
+    </button>
+    
 </form>
 {% endblock %}

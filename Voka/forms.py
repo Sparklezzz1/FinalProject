@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.models import User 
 from .models.appointment import Appointment
 from .models.services import Services
 from django.forms.widgets import DateInput
@@ -40,3 +41,17 @@ class ServicesForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
+
+class RegistrationForm(forms.Form):
+    username = forms.CharField()
+    password = forms.CharField()
+    repeat_password = forms.CharField()
+
+    def save(self):
+        same_name_users = User.objects.filter(username=self.cleaned_data["username"]).exists()
+        if not same_name_users and self.cleaned_data["password"] == self.cleaned_data["repeat_password"]:
+            user = User(username=self.cleaned_data["username"])
+            user.set_password(self.cleaned_data["password"])  
+            user.save()
+            return user
+        return None

@@ -6,8 +6,9 @@ from .models.services import Services
 from .models.services import Direction
 from .models.doctors import Doctors
 from .models.appointment import Appointment
-from .forms import AppointmentForm,ServicesForm
-from django.views.generic.edit import CreateView
+from .forms import AppointmentForm, RegistrationForm,ServicesForm
+from django.views.generic.edit import CreateView,FormView
+from django.core.paginator import Paginator
 
 
 menu = [
@@ -15,10 +16,7 @@ menu = [
     {'title': 'Услуги', 'url_name': 'services'},
     {'title': 'Врачи', 'url_name': 'doctors'},
     {'title': 'Новости', 'url_name': 'news'},
-    {'title': 'Контакты', 'url_name': 'contacts'},
-    {'title': 'Авторизация', 'url_name': 'login'},
     {'title': 'Запись на прием', 'url_name': 'appointment'},
-    {'title': 'Создание услуги', 'url_name': 'services_create'},
 ]
 
 
@@ -41,10 +39,19 @@ def get_filtered_services(doc_slug=None, dir_slug=None):
 
 def main_page(request):
     services, _, _ = get_filtered_services()
+    sale = services.filter(on_sale = Services.OnSale.SALEYES) 
+    doctors = Doctors.objects.all()
+    manager = doctors.filter(manager = Doctors.Managers.YES)
+
     return render(request, 'Voka/main_page.html', {
         'title': 'Главная страница',
         'menu': menu,
-        'services': services,
+        'services': services,   
+        'manager':manager,
+        'sale':sale,
+        'SALEYES': Services.OnSale.SALEYES,
+        'doctors':doctors,
+        'YES': Doctors.Managers.YES,
     })
 
 
@@ -160,13 +167,20 @@ def appointment(request):
 def news(request):
     return HttpResponse("Новости")
 
+def profile(request):
+    return render(request, 'Voka/profile.html', {
+        'title': 'Профиль',
+        'menu': menu,
+    })
 
-def login(request):
-    return HttpResponse("Авторизация")
+class Registration(FormView):
+    form_class = RegistrationForm
+    template_name = "registration/registration.html"
+    success_url = reverse_lazy("main_page")
 
-
-def contacts(request):
-    return HttpResponse("Контакты")
+    def form_valid(self, form:RegistrationForm):
+        form.save()
+        return super().form_valid(form)
 
 
 def page_not_found(request, exception):
