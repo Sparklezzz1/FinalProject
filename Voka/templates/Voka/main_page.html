@@ -39,9 +39,11 @@
 
                    
                     {% if s.doctors.exists %}
+                    
                         <p class="fw-bold mb-1">Врачи, оказывающие услугу:</p>
                         <ul class="list-group list-group-flush mb-2 flex-grow-0">
                             {% for doc in s.doctors.all %}
+                            
                                 <li class="list-group-item py-1">
                                     <a href="{{ doc.get_absolute_url }}">{{ doc.name }} {{ doc.surname }}</a>
                                 </li>
@@ -73,9 +75,19 @@
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
     {% for d in doctors %}
         {% if d.manager == YES %}
+        
         <div class="col">
             <div class="card h-100 shadow-sm">
                 <div class="card-body d-flex flex-column">
+                        <div class="col-md-4 text-center bg-light py-4">
+                {% if d.image %}
+                    <img src="{{ d.image.url }}" alt="{{ d.surname }} {{ d.name }}"
+                         style="width: 260px; height: 360px; object-fit: cover; border-radius: 12px;">
+                {% else %}
+                    <img src="{% static 'Voka/images/default.jpg' %}" alt="{{ d.surname }} {{ d.name }}"
+                         style="width: 260px; height: 360px; object-fit: cover; border-radius: 12px;">
+                {% endif %}
+            </div>
                     <h5 class="card-title mb-2"><strong>Имя:</strong> {{ d.surname }} {{ d.name }} {{ d.patronymic }}</h5>
                     <p class="card-text mb-1"><strong>Должность:</strong> {{ d.job_title }}</p>
                     <p class="card-text mb-2"><strong>Опыт работы:</strong> {{ d.experience }} лет</p>

@@ -15,6 +15,12 @@ class Doctors(models.Model):
     experience = models.IntegerField(verbose_name="Стаж работы", default=0,)
     slug = models.SlugField(max_length=255,unique=True,db_index=True)
     manager = models.IntegerField(verbose_name="Руководство", choices=Managers.choices, default=Managers.NO)
+    image = models.ImageField(
+        upload_to='doctors/',  
+        null=True,              
+        blank=True,             
+        default='doctors/default.jpg',  
+    )
 
 
     def __str__(self):
