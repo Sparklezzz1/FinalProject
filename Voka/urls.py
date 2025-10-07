@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
-
-
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('', views.main_page, name="main_page"),
@@ -18,4 +18,4 @@ urlpatterns = [
     path('services/<int:service_id>/edit/', views.service_edit, name='service_edit'),
     path('registration/', views.Registration.as_view(), name = "registration"),
     path('profile/', views.profile, name = 'profile'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

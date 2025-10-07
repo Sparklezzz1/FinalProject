@@ -24,6 +24,13 @@ class Services(models.Model):
     doctors = models.ManyToManyField('Voka.Doctors',verbose_name="Время создания", blank=True,related_name="services")
     on_sale = models.IntegerField(verbose_name="На акции",choices=OnSale.choices, default=OnSale.SALENO)
     sale_price = models.FloatField(verbose_name="Размер скидки",null=True, blank=True)
+    image = models.ImageField(
+        upload_to='services/',  
+        null=True,              
+        blank=True,             
+        default='services/default.jpg',  
+    )
+
     objects = models.Manager()
 
     def final_price(self):

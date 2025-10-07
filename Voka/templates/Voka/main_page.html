@@ -1,76 +1,90 @@
 {% extends 'base.html' %}
-{% block content %}
+{% load static %}
 {% load voka_tags %}
+
+{% block content %}
 <h1 class="mb-4">{{ title }}</h1>
-<div class="h3"> Сейчас на скидке</div>
+
+
+<div class="h3 mb-3">Сейчас на скидке</div>
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-
     {% for s in services %}
-    {% if s.on_sale == SALEYES %}
-<div class="col">
-    <div class="card h-100 shadow-sm d-flex flex-column">
-        <div class="card-body d-flex flex-column">
+        {% if s.on_sale == SALEYES %}
+        <div class="col">
+            <div class="card h-100 shadow-sm d-flex flex-column">
+                <div class="card-body d-flex flex-column">
 
-            <h5 class="card-title">{{ s.title }}</h5>
+                   
+                    <h5 class="card-title">{{ s.title }}</h5>
 
-            {% if s.sale_price %}
-            <p class="card-text text-danger">
-                <strong>Цена со скидкой:</strong> {{ s.final_price }} BYN
-            </p>
-            <p class="text-muted text-decoration-line-through">{{ s.price }} BYN</p>
-            {% else %}
-            <p class="card-text"><strong>Стоимость:</strong> {{ s.price }} BYN</p>
-            {% endif %}
+                    
+                    {% if s.image %}
+                        <img src="{{ s.image.url }}" alt="{{ s.title }}" class="service-img mb-2">
+                    {% else %}
+                        <img src="{% static 'Voka/images/default.jpg' %}" alt="{{ s.title }}" class="service-img mb-2">
+                    {% endif %}
 
+                    
+                    {% if s.sale_price %}
+                        <p class="card-text text-danger mb-1">
+                            <strong>Цена со скидкой:</strong> {{ s.final_price }} BYN
+                        </p>
+                        <p class="text-muted text-decoration-line-through mb-2">{{ s.price }} BYN</p>
+                    {% else %}
+                        <p class="card-text mb-2"><strong>Стоимость:</strong> {{ s.price }} BYN</p>
+                    {% endif %}
 
-            <p class="card-text"><strong>Направление:</strong> {{ s.direction }}</p>
+                    
+                    <p class="card-text mb-2"><strong>Направление:</strong> {{ s.direction }}</p>
 
+                   
+                    {% if s.doctors.exists %}
+                        <p class="fw-bold mb-1">Врачи, оказывающие услугу:</p>
+                        <ul class="list-group list-group-flush mb-2 flex-grow-0">
+                            {% for doc in s.doctors.all %}
+                                <li class="list-group-item py-1">
+                                    <a href="{{ doc.get_absolute_url }}">{{ doc.name }} {{ doc.surname }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted mb-2">Врачи не назначены</p>
+                    {% endif %}
 
-            {% if s.doctors.exists %}
-            <p class="fw-bold mb-1">Врачи, оказывающие услугу:</p>
-            <ul class="list-group list-group-flush mb-2 flex-grow-0">
-                {% for doc in s.doctors.all %}
-                <li class="list-group-item py-1">
-                    <a href="{{ doc.get_absolute_url }}">{{ doc.name }} {{ doc.surname }}</a>
-                </li>
-                {% endfor %}
-            </ul>
-            {% else %}
-            <p>Врачи не назначены</p>
-            {% endif %}
+                    
+                    <div class="mt-auto d-flex flex-column gap-2">
+                        <a href="{{ s.get_absolute_url }}" class="btn btn-primary d-block">Подробнее</a>
+                        <a href="{% url 'appointment_with_service' s.id %}" class="btn btn-success d-block">
+                            Записаться на приём
+                        </a>
+                    </div>
 
-
-            <div class="mt-auto d-flex flex-column gap-2">
-                <a href="{{ s.get_absolute_url }}" class="btn btn-primary d-block">Подробнее</a>
-                <a href="{% url 'appointment_with_service' s.id %}" class="btn btn-success d-block">
-                    Записаться на приём
-                </a>
+                </div>
             </div>
         </div>
-    </div>
-</div>
-{% endif %}
-
+        {% endif %}
     {% endfor %}
 </div>
 
 <hr class="my-5">
 
-<div class="h3"> Наши врачи</div>
+
+<div class="h3 mb-3">Наши врачи</div>
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
     {% for d in doctors %}
-    {% if d.manager == YES %}
-    <div class="col">
-        <div class="card h-100 shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title"><strong>Имя:</strong> {{ d.surname }} {{ d.name }} {{ d.patronymic }}</h5>
-                <p class="card-text"><strong>Должность:</strong> {{ d.job_title }}</p>
-                <p class="card-text"><strong>Опыт работы:</strong> {{ d.experience }} Лет</p>
-                <a href="{{ d.get_absolute_url }}" class="btn btn-primary mt-2">Подробнее</a>
+        {% if d.manager == YES %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title mb-2"><strong>Имя:</strong> {{ d.surname }} {{ d.name }} {{ d.patronymic }}</h5>
+                    <p class="card-text mb-1"><strong>Должность:</strong> {{ d.job_title }}</p>
+                    <p class="card-text mb-2"><strong>Опыт работы:</strong> {{ d.experience }} лет</p>
+                    <a href="{{ d.get_absolute_url }}" class="btn btn-primary mt-auto">Подробнее</a>
+                </div>
             </div>
         </div>
-    </div>
-    {% endif %}
+        {% endif %}
     {% endfor %}
 </div>
+
 {% endblock %}

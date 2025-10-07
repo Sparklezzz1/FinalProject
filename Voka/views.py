@@ -70,7 +70,7 @@ def services(request):
 
 def services_create(request):
     if request.method == 'POST':
-        form = ServicesForm(request.POST) 
+        form = ServicesForm(request.POST, request.FILES) 
         if form.is_valid():
             form.save()
             return redirect('services')

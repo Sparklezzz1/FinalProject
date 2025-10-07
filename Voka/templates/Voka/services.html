@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 {% load voka_tags %}
+{% load static %}
 {% block content %}
 
-<h1 class="mb-4">{{ title }}</h1>
+<h1 class="mb-4 text-center">{{ title }}</h1>
 
 <div class="row">
 
+ 
     <div class="col-12 col-md-3 mb-4">
         <div class="card shadow-sm mb-3">
             <div class="card-header bg-primary text-white text-center">
@@ -26,35 +28,45 @@
         </div>
     </div>
 
-
+    
     <div class="col-12 col-md-9">
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+
             {% for item in services %}
             <div class="col">
-                <div class="card h-100 shadow-sm d-flex flex-column">
+                <div class="card h-100 shadow-sm d-flex flex-column border-0 overflow-hidden">
+
+                   
+                    {% if item.image %}
+                        <img src="{{ item.image.url }}" alt="{{ item.title }}" class="service-img">
+                    {% else %}
+                        <img src="{% static 'Voka/images/default.jpg' %}" alt="{{ item.title }}" class="service-img">
+                    {% endif %}
+
+                
                     <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">{{ item.title }}</h5>
+                        <h5 class="card-title text-center mb-3">{{ item.title }}</h5>
 
                         {% if item.sale_price %}
-                            <p class="card-text text-danger">
+                            <p class="card-text text-danger text-center mb-1">
                                 <strong>Цена со скидкой:</strong> {{ item.final_price }} BYN
                             </p>
-                            <p class="text-muted text-decoration-line-through">{{ item.price }} BYN</p>
+                            <p class="text-muted text-center text-decoration-line-through mb-2">{{ item.price }} BYN</p>
                         {% else %}
-                            <p class="card-text"><strong>Стоимость:</strong> {{ item.price }} BYN</p>
+                            <p class="card-text text-center mb-2"><strong>Стоимость:</strong> {{ item.price }} BYN</p>
                         {% endif %}
 
                         {% if item.content %}
-                            <p class="card-text">{{ item.content|truncatewords:10 }}</p>
+                            <p class="card-text text-muted small text-center">{{ item.content|truncatewords:10 }}</p>
                         {% endif %}
 
-                        <p class="card-text"><strong>Направление:</strong> {{ item.direction }}</p>
+                        <p class="card-text text-center"><strong>Направление:</strong> {{ item.direction }}</p>
 
                         {% if item.doctors.exists %}
-                            <p class="fw-bold mb-1">Врачи, оказывающие услугу:</p>
-                            <ul class="list-group list-group-flush mb-2 flex-grow-0">
+                            <p class="fw-bold mb-1 text-center">Врачи:</p>
+                            <ul class="list-group list-group-flush small mb-3">
                                 {% for doc in item.doctors.all %}
-                                    <li class="list-group-item py-1">
+                                    <li class="list-group-item py-1 text-center">
                                         {% if doc.get_absolute_url %}
                                             <a href="{{ doc.get_absolute_url }}">{{ doc.name }} {{ doc.surname }}</a>
                                         {% else %}
@@ -64,7 +76,7 @@
                                 {% endfor %}
                             </ul>
                         {% else %}
-                            <p>Врачи не назначены</p>
+                            <p class="text-muted text-center">Врачи не назначены</p>
                         {% endif %}
 
                         <div class="mt-auto d-flex flex-column gap-2">
@@ -79,17 +91,14 @@
                                 <a href="{% url 'service_delete' item.pk %}" class="btn btn-danger w-100 mt-2">Удалить</a>
                             {% endif %}
 
-
-                            <a href="{% url 'appointment_with_service' item.id %}" class="btn btn-success mt-2">
+                            <a href="{% url 'appointment_with_service' item.id %}" class="btn btn-success w-100 mt-2">
                                 Записаться на приём
                             </a>
                         </div>
-
                     </div>
                 </div>
             </div>
             {% endfor %}
-
 
             {% if user.username == 'admin' %}
             <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex align-items-center justify-content-center">
@@ -98,9 +107,36 @@
                 </a>
             </div>
             {% endif %}
-
         </div>
     </div>
 </div>
 
 {% endblock %}
+
+<style>
+.service-img {
+    width: 100%;
+    height: 320px;               
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.4s ease, filter 0.3s ease;
+}
+
+.service-img:hover {
+    transform: scale(1.03);
+    filter: brightness(1.1);
+}
+
+.card {
+    border-radius: 12px;
+}
+
+.card-body {
+    padding: 1.25rem;
+}
+
+.card-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+</style>

@@ -1,11 +1,15 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
 <div class="container mt-4">
     <div class="card shadow-sm">
         <div class="card-body">
             <h2 class="card-title">{{ serv.title }}</h2>
-
+            {% if serv.image %}
+                <img src="{{ serv.image.url }}" alt="{{ serv.title }}" style="width:600px; height:300px; object-fit:cover; border-radius:5px; margin-bottom:10px;">
+            {% else %}
+                <img src="{% static 'Voka/images/default.jpg' %}" alt="{{ serv.title }}" style="width:600px; height:300px; object-fit:cover; border-radius:5px; margin-bottom:10px;">
+            {% endif %}
             {% if serv.sale_price %}
                 <p class="card-text text-danger">
                     <strong>Цена со скидкой:</strong> {{ serv.final_price }} BYN
