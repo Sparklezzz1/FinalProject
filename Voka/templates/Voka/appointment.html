@@ -1,9 +1,12 @@
 {% extends 'base.html' %}
-
 {% block content %}
 <div class="container mt-5 mb-5">
-    <div class="mx-auto" style="max-width: 300px;">
-        <h2 class="text-center mb-4">Запись на приём</h2>
+    <div class="mx-auto" style="max-width: 400px;">
+
+        <h2 class="text-center mb-4">
+                Запись на приём
+        </h2>
+
         <form method="post">
             {% csrf_token %}
             {% for field in form %}
@@ -15,10 +18,12 @@
                     {% endfor %}
                 </div>
             {% endfor %}
+
             <button type="submit" class="btn btn-primary btn-sm w-100 mb-3">
                 Сохранить данные
             </button>
         </form>
+
     </div>
 </div>
 {% endblock %}

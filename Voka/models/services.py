@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
 from slugify import slugify
+from django.contrib.auth.models import User
 
 class Services(models.Model):
     class Status(models.IntegerChoices):
@@ -48,7 +49,12 @@ class Direction(models.Model):
     def __str__(self):
         return self.name
     
+class Order(models.Model):
+    user = models.ForeignKey(User, verbose_name="Пользователь", on_delete=models.CASCADE)
+    service = models.ForeignKey(Services, verbose_name="Услуга", on_delete=models.CASCADE)
     
+    def __str__(self):
+        return f"{self.user.username} - {self.service.title}"
 
     
 

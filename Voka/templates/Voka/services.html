@@ -5,6 +5,7 @@
 <h1 class="mb-4">{{ title }}</h1>
 
 <div class="row">
+
     <div class="col-12 col-md-3 mb-4">
         <div class="card shadow-sm mb-3">
             <div class="card-header bg-primary text-white text-center">
@@ -25,6 +26,7 @@
         </div>
     </div>
 
+
     <div class="col-12 col-md-9">
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
             {% for item in services %}
@@ -34,35 +36,35 @@
                         <h5 class="card-title">{{ item.title }}</h5>
 
                         {% if item.sale_price %}
-                        <p class="card-text text-danger">
-                            <strong>Цена со скидкой:</strong> {{ item.final_price }} BYN
-                        </p>
-                        <p class="text-muted text-decoration-line-through">{{ item.price }} BYN</p>
+                            <p class="card-text text-danger">
+                                <strong>Цена со скидкой:</strong> {{ item.final_price }} BYN
+                            </p>
+                            <p class="text-muted text-decoration-line-through">{{ item.price }} BYN</p>
                         {% else %}
-                        <p class="card-text"><strong>Стоимость:</strong> {{ item.price }} BYN</p>
+                            <p class="card-text"><strong>Стоимость:</strong> {{ item.price }} BYN</p>
                         {% endif %}
 
                         {% if item.content %}
-                        <p class="card-text">{{ item.content|truncatewords:10 }}</p>
+                            <p class="card-text">{{ item.content|truncatewords:10 }}</p>
                         {% endif %}
 
                         <p class="card-text"><strong>Направление:</strong> {{ item.direction }}</p>
 
                         {% if item.doctors.exists %}
-                        <p class="fw-bold mb-1">Врачи, оказывающие услугу:</p>
-                        <ul class="list-group list-group-flush mb-2 flex-grow-0">
-                            {% for doc in item.doctors.all %}
-                            <li class="list-group-item py-1">
-                                {% if doc.get_absolute_url %}
-                                    <a href="{{ doc.get_absolute_url }}">{{ doc.name }} {{ doc.surname }}</a>
-                                {% else %}
-                                    {{ doc.name }} {{ doc.surname }}
-                                {% endif %}
-                            </li>
-                            {% endfor %}
-                        </ul>
+                            <p class="fw-bold mb-1">Врачи, оказывающие услугу:</p>
+                            <ul class="list-group list-group-flush mb-2 flex-grow-0">
+                                {% for doc in item.doctors.all %}
+                                    <li class="list-group-item py-1">
+                                        {% if doc.get_absolute_url %}
+                                            <a href="{{ doc.get_absolute_url }}">{{ doc.name }} {{ doc.surname }}</a>
+                                        {% else %}
+                                            {{ doc.name }} {{ doc.surname }}
+                                        {% endif %}
+                                    </li>
+                                {% endfor %}
+                            </ul>
                         {% else %}
-                        <p>Врачи не назначены</p>
+                            <p>Врачи не назначены</p>
                         {% endif %}
 
                         <div class="mt-auto d-flex flex-column gap-2">
@@ -71,25 +73,30 @@
                             {% else %}
                                 <span class="btn btn-secondary w-100 disabled">Подробнее</span>
                             {% endif %}
+
                             {% if user.username == "admin" %}
-                           <a href="{% url 'service_edit' item.pk %}" class="btn btn-warning w-100 mt-2">Редактировать</a>
-                           <a href="{% url 'service_delete' item.pk %}" class="btn btn-danger w-100 mt-2">Удалить</a>
-                           {% endif %}
+                                <a href="{% url 'service_edit' item.pk %}" class="btn btn-warning w-100 mt-2">Редактировать</a>
+                                <a href="{% url 'service_delete' item.pk %}" class="btn btn-danger w-100 mt-2">Удалить</a>
+                            {% endif %}
+
+
+                            <a href="{% url 'appointment_with_service' item.id %}" class="btn btn-success mt-2">
+                                Записаться на приём
+                            </a>
                         </div>
 
                     </div>
                 </div>
             </div>
             {% endfor %}
-            {% if user.username == 'admin'%}
-            
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex align-items-center justify-content-center">
-                    <a href="{% url 'services_create' %}" 
-                    class="btn btn-success w-100 shadow-sm py-2">
+
+
+            {% if user.username == 'admin' %}
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex align-items-center justify-content-center">
+                <a href="{% url 'services_create' %}" class="btn btn-success w-100 shadow-sm py-2">
                     Создать услугу
-                    </a>
-                </div>
-           
+                </a>
+            </div>
             {% endif %}
 
         </div>

@@ -2,13 +2,13 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse, HttpResponseNotFound
 from django.urls import reverse_lazy
-from .models.services import Services
-from .models.services import Direction
+from .models.services import Services, Direction, Order
 from .models.doctors import Doctors
 from .models.appointment import Appointment
 from .forms import AppointmentForm, RegistrationForm,ServicesForm
 from django.views.generic.edit import CreateView,FormView
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
 
 
 menu = [
@@ -53,7 +53,6 @@ def main_page(request):
         'doctors':doctors,
         'YES': Doctors.Managers.YES,
     })
-
 
 def services(request):
     doc_slug = request.GET.get('doctor')
@@ -152,24 +151,42 @@ def about(request):
     })
 
 
-def appointment(request):
+@login_required
+def appointment(request, service_id=None):
     if request.method == 'POST':
         form = AppointmentForm(request.POST)
         if form.is_valid():
-            form.save()
-            messages.success(request, 'Заявка успешно отправлена!')
-            return redirect('main_page')
+            appointment = form.save(commit=False)
+            appointment.user = request.user
+            appointment.save()
+
+            service = appointment.services
+
+            Order.objects.get_or_create(user=request.user, service=service)
+
+            messages.success(request, f'Вы успешно записались на услугу "{service.title}"!')
+            return redirect('profile')
     else:
         form = AppointmentForm()
-    return render(request, "Voka/appointment.html",{'title':"Запись на прием",'menu':menu,'form':form})
+
+    return render(request, "Voka/appointment.html", {
+        'title': "Запись на приём",
+        'menu': menu,
+        'form': form,
+    })
+
+
 
 
 def news(request):
     return HttpResponse("Новости")
 
+@login_required
 def profile(request):
+    orders = Order.objects.filter(user=request.user)
     return render(request, 'Voka/profile.html', {
         'title': 'Профиль',
+        'orders' : orders,
         'menu': menu,
     })
 

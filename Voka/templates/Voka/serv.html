@@ -43,6 +43,9 @@
             {% else %}
                 <p class="mt-4 text-muted">Врачи пока не назначены для этой услуги</p>
             {% endif %}
+            <a href="{% url 'appointment_with_service' serv.id %}" class="btn btn-success">
+            Записаться на приём
+            </a>
         </div>
     </div>
 </div>
