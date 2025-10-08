@@ -1,24 +1,50 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
-<h1>{{ title }}</h1>
-<table class="table table-bordered">
-    <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Имя</th>
-        <th scope="col">Фамилия</th>
-        <th scope="col">Отчествол</th>
-        <th scope="col">Опыт работы</th>
-        <th scope="col">Должность</th>
-    </tr>
-    {% for item in doctors %}
-    <tr scope="row">
-        <td>{{ item.id }}</td>
-        <td>{{ item.name }}</td>
-        <td>{{ item.surname }}</td>
-        <td>{{ item.patronymic }}</td>
-        <td>{{ item.experience }}</td>
-        <td>{{ item.job_title }}</td>
-    </tr>
-    {% endfor %}
-</table>
+
+<div class="container mt-5">
+    <h1 class="mb-4 text-center">{{ title }}</h1>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for item in doctors %}
+        <div class="col">
+            <div class="card shadow-sm h-100 border-0 rounded-4 overflow-hidden">
+
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" alt="{{ item.surname }} {{ item.name }}"
+                         class="card-img-top" style="height: 520px; object-fit: cover;">
+                {% else %}
+                    <img src="{% static 'Voka/images/default.jpg' %}" alt="{{ item.surname }} {{ item.name }}"
+                         class="card-img-top" style="height: 520px; object-fit: cover;">
+                {% endif %}
+
+                <div class="card-body text-center">
+                    <h5 class="card-title mb-1">
+                        {{ item.surname }} {{ item.name }} {{ item.patronymic }}
+                    </h5>
+
+                    {% if item.job_title %}
+                        <p class="text-muted mb-2">{{ item.job_title }}</p>
+                    {% endif %}
+
+                    <p class="fw-medium mb-1">
+                        <strong>Опыт работы:</strong> {{ item.experience }} лет
+                    </p>
+
+                    {% if item.get_absolute_url %}
+                        <a href="{{ item.get_absolute_url }}" class="btn btn-primary mt-2 w-100">
+                            Подробнее
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center text-muted py-5">
+            Врачи пока не добавлены.
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
 {% endblock %}

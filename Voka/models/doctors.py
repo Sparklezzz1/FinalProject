@@ -21,7 +21,7 @@ class Doctors(models.Model):
         blank=True,             
         default='doctors/default.jpg',  
     )
-
+    
 
     def __str__(self):
          return f"{self.surname} {self.name} {self.patronymic}"

@@ -40,7 +40,7 @@ def get_filtered_services(doc_slug=None, dir_slug=None):
 def main_page(request):
     services, _, _ = get_filtered_services()
     sale = services.filter(on_sale = Services.OnSale.SALEYES) 
-    doctors = Doctors.objects.all()
+    doctors = Doctors.objects.all().order_by('-experience')
     manager = doctors.filter(manager = Doctors.Managers.YES)
 
     return render(request, 'Voka/main_page.html', {
@@ -127,7 +127,7 @@ def filter_direction(request, direction_slug):
 
 
 def doctors(request):
-    doctors = Doctors.objects.all()
+    doctors = Doctors.objects.all().order_by('-experience')
     return render(request, 'Voka/doctors.html', {
         'title': 'Врачи',
         'menu': menu,
