@@ -23,7 +23,7 @@
                             </p>
                         </div>
                         <div class="card-footer text-end">
-                            <form method="post" action="{% url 'service_delete' order.id %}">
+                            <form method="post" action="{% url 'order_delete' order.id %}">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-sm btn-danger">Удалить</button>
                             </form>

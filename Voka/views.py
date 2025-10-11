@@ -20,11 +20,13 @@ menu = [
 ]
 
 
-def get_filtered_services(doc_slug=None, dir_slug=None):
+
+def get_filtered_services(doc_slug=None, dir_slug=None, sale_param=None):
     services = Services.objects.filter(availability=Services.Status.PUBLISHED)
 
     selected_doc = None
     selected_dir = None
+    selected_sale = None
 
     if doc_slug:
         selected_doc = get_object_or_404(Doctors, slug=doc_slug)
@@ -34,37 +36,53 @@ def get_filtered_services(doc_slug=None, dir_slug=None):
         selected_dir = get_object_or_404(Direction, slug=dir_slug)
         services = services.filter(direction=selected_dir)
 
+    if sale_param == '1':  
+        services = services.filter(on_sale=Services.OnSale.SALEYES)
+    
     return services, selected_doc, selected_dir
 
 
 def main_page(request):
     services, _, _ = get_filtered_services()
-    sale = services.filter(on_sale = Services.OnSale.SALEYES) 
+    
     doctors = Doctors.objects.all().order_by('-experience')
+    
+    sale = services.filter(on_sale = Services.OnSale.SALEYES) 
     manager = doctors.filter(manager = Doctors.Managers.YES)
+
+    sale_paginator = Paginator(sale,3)
+    sale_page =request.GET.get('sale_page')
+    sale_page_obj = sale_paginator.get_page(sale_page)
+
+
+    doctor_paginator = Paginator(manager,3)
+    doctor_page =request.GET.get('doctor_page')
+    doctor_page_obj = doctor_paginator.get_page(doctor_page)
 
     return render(request, 'Voka/main_page.html', {
         'title': 'Главная страница',
         'menu': menu,
         'services': services,   
         'manager':manager,
-        'sale':sale,
         'SALEYES': Services.OnSale.SALEYES,
-        'doctors':doctors,
         'YES': Doctors.Managers.YES,
+        'sale_page_obj':sale_page_obj,
+        'doctor_page_obj':doctor_page_obj,
     })
 
 def services(request):
     doc_slug = request.GET.get('doctor')
     dir_slug = request.GET.get('directions')
-
-    services, selected_doc, selected_dir = get_filtered_services(doc_slug, dir_slug)
+    sale_param = request.GET.get('sale')
+    
+    services, selected_doc, selected_dir = get_filtered_services(doc_slug, dir_slug,sale_param)
     return render(request, 'Voka/services.html', {
         'title': 'Услуги',
         'menu': menu,
         'services': services,
         'selected_doc': selected_doc,
         'selected_dir': selected_dir,
+        'sale_param':sale_param,
     })
 
 
@@ -143,7 +161,13 @@ def show_docs(request, doc_slug):
         'doc': doc,
     })
 
-
+@login_required
+def order_delete(request, pk):
+    order = get_object_or_404(Order, pk=pk, user=request.user)
+    if request.method == "POST":
+        order.delete() 
+        return redirect("profile")  
+    
 def about(request):
     return render(request, 'Voka/about.html', {
         'title': 'О нас',

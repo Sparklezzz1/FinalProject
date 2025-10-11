@@ -29,6 +29,8 @@ class Appointment(models.Model):
     class Meta:
         unique_together = ('services', 'date', 'time')
         ordering = ['-date', '-time']
+        verbose_name = "Форма записи на прием"
+        verbose_name_plural = "Формы записи на прием"
 
     def __str__(self):
         return f"{self.patient_surname} {self.patient_name} : {self.services} ({self.date} {self.time})"

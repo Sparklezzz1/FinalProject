@@ -48,6 +48,10 @@ class Services(models.Model):
     
     def get_absolute_url(self):
         return reverse('serv', kwargs={'serv_slug' : self.slug})
+    
+    class Meta:
+        verbose_name = "Услуга"
+        verbose_name_plural = "Услуги"
 
 class Direction(models.Model):
     name = models.CharField(max_length=255, db_index=True)
@@ -56,12 +60,20 @@ class Direction(models.Model):
     def __str__(self):
         return self.name
     
+    class Meta:
+        verbose_name = "Направление"
+        verbose_name_plural = "Направления"
+    
 class Order(models.Model):
-    user = models.ForeignKey(User, verbose_name="Пользователь", on_delete=models.CASCADE)
-    service = models.ForeignKey(Services, verbose_name="Услуга", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, verbose_name="Пользователь", on_delete=models.PROTECT)
+    service = models.ForeignKey(Services, verbose_name="Услуга", on_delete=models.PROTECT)
     
     def __str__(self):
         return f"{self.user.username} - {self.service.title}"
+    
+    class Meta:
+        verbose_name = "Запись на прием"
+        verbose_name_plural = "Записи на прием"
 
     
 

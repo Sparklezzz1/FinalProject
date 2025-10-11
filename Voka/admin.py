@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models.services import Services
 from .models.services import Direction
+from .models.services import Order
 from .models.doctors import Doctors
 from .models.appointment import Appointment
 
@@ -9,5 +10,6 @@ admin.site.register(Services)
 admin.site.register(Doctors)
 admin.site.register(Direction)
 admin.site.register(Appointment)
+admin.site.register(Order)
 class ServicesAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}

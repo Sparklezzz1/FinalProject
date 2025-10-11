@@ -7,96 +7,177 @@
 
 
 <div class="h3 mb-3">Сейчас на скидке</div>
+
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-    {% for s in services %}
-        {% if s.on_sale == SALEYES %}
-        <div class="col">
-            <div class="card h-100 shadow-sm d-flex flex-column">
-                <div class="card-body d-flex flex-column">
+  {% for s in sale_page_obj %}
+    {% if s.on_sale == SALEYES %}
+      <div class="col">
+        <div class="card h-100 shadow-sm d-flex flex-column">
+          <div class="card-body d-flex flex-column">
 
-                   
-                    <h5 class="card-title">{{ s.title }}</h5>
+            <h5 class="card-title">{{ s.title }}</h5>
 
-                    
-                    {% if s.image %}
-                        <img src="{{ s.image.url }}" alt="{{ s.title }}" class="service-img mb-2">
-                    {% else %}
-                        <img src="{% static 'Voka/images/default.jpg' %}" alt="{{ s.title }}" class="service-img mb-2">
-                    {% endif %}
+            {% if s.image %}
+              <img src="{{ s.image.url }}" alt="{{ s.title }}" class="service-img mb-2">
+            {% else %}
+              <img src="{% static 'Voka/images/default.jpg' %}" alt="{{ s.title }}" class="service-img mb-2">
+            {% endif %}
 
-                    
-                    {% if s.sale_price %}
-                        <p class="card-text text-danger mb-1">
-                            <strong>Цена со скидкой:</strong> {{ s.final_price }} BYN
-                        </p>
-                        <p class="text-muted text-decoration-line-through mb-2">{{ s.price }} BYN</p>
-                    {% else %}
-                        <p class="card-text mb-2"><strong>Стоимость:</strong> {{ s.price }} BYN</p>
-                    {% endif %}
+            {% if s.sale_price %}
+              <p class="card-text text-danger mb-1">
+                <strong>Цена со скидкой:</strong> {{ s.final_price }} BYN
+              </p>
+              <p class="text-muted text-decoration-line-through mb-2">{{ s.price }} BYN</p>
+            {% else %}
+              <p class="card-text mb-2"><strong>Стоимость:</strong> {{ s.price }} BYN</p>
+            {% endif %}
 
-                    
-                    <p class="card-text mb-2"><strong>Направление:</strong> {{ s.direction }}</p>
+            <p class="card-text mb-2"><strong>Направление:</strong> {{ s.direction }}</p>
 
-                   
-                    {% if s.doctors.exists %}
-                    
-                        <p class="fw-bold mb-1">Врачи, оказывающие услугу:</p>
-                        <ul class="list-group list-group-flush mb-2 flex-grow-0">
-                            {% for doc in s.doctors.all %}
-                            
-                                <li class="list-group-item py-1">
-                                    <a href="{{ doc.get_absolute_url }}">{{ doc.name }} {{ doc.surname }}</a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% else %}
-                        <p class="text-muted mb-2">Врачи не назначены</p>
-                    {% endif %}
+            {% if s.doctors.exists %}
+              <p class="fw-bold mb-1">Врачи, оказывающие услугу:</p>
+              <ul class="list-group list-group-flush mb-2 flex-grow-0">
+                {% for doc in s.doctors.all %}
+                  <li class="list-group-item py-1">
+                    <a href="{{ doc.get_absolute_url }}">{{ doc.name }} {{ doc.surname }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p class="text-muted mb-2">Врачи не назначены</p>
+            {% endif %}
 
-                    
-                    <div class="mt-auto d-flex flex-column gap-2">
-                        <a href="{{ s.get_absolute_url }}" class="btn btn-primary d-block">Подробнее</a>
-                        <a href="{% url 'appointment_with_service' s.id %}" class="btn btn-success d-block">
-                            Записаться на приём
-                        </a>
-                    </div>
-
-                </div>
+            <div class="mt-auto d-flex flex-column gap-2">
+              <a href="{{ s.get_absolute_url }}" class="btn btn-primary d-block">Подробнее</a>
+              <a href="{% url 'appointment_with_service' s.id %}" class="btn btn-success d-block">
+                Записаться на приём
+              </a>
             </div>
+
+          </div>
         </div>
-        {% endif %}
-    {% endfor %}
+      </div>
+    {% endif %}
+  {% empty %}
+    <p class="text-center text-muted">На данный момент акционных услуг нет.</p>
+  {% endfor %}
 </div>
+
+
+{% if sale_page_obj.has_other_pages %}
+  <nav aria-label="Sale pagination" class="mt-4">
+    <ul class="pagination justify-content-center">
+
+      {% if sale_page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?sale_page={{ sale_page_obj.previous_page_number }}" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <span class="page-link" aria-hidden="true">&laquo;</span>
+        </li>
+      {% endif %}
+
+      {% for num in sale_page_obj.paginator.page_range %}
+        {% if num == sale_page_obj.number %}
+          <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+        {% else %}
+          <li class="page-item">
+            <a class="page-link" href="?sale_page={{ num }}">{{ num }}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+
+      {% if sale_page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?sale_page={{ sale_page_obj.next_page_number }}" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <span class="page-link" aria-hidden="true">&raquo;</span>
+        </li>
+      {% endif %}
+
+    </ul>
+  </nav>
+{% endif %}
 
 <hr class="my-5">
 
-
 <div class="h3 mb-3">Наши врачи</div>
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-    {% for d in doctors %}
-        {% if d.manager == YES %}
-        
-        <div class="col">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body d-flex flex-column">
-                        <div class="col-md-4 text-center bg-light py-4">
-                {% if d.image %}
-                    <img src="{{ d.image.url }}" alt="{{ d.surname }} {{ d.name }}"
-                         style="width: 260px; height: 360px; object-fit: cover; border-radius: 12px;">
-                {% else %}
-                    <img src="{% static 'Voka/images/default.jpg' %}" alt="{{ d.surname }} {{ d.name }}"
-                         style="width: 260px; height: 360px; object-fit: cover; border-radius: 12px;">
-                {% endif %}
+  {% for d in doctor_page_obj %}
+    {% if d.manager == YES %}
+      <div class="col">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body d-flex flex-column">
+            <div class="col-md-4 text-center bg-light py-4">
+              {% if d.image %}
+                <img src="{{ d.image.url }}" alt="{{ d.surname }} {{ d.name }}"
+                     style="width: 260px; height: 360px; object-fit: cover; border-radius: 12px;">
+              {% else %}
+                <img src="{% static 'Voka/images/default.jpg' %}" alt="{{ d.surname }} {{ d.name }}"
+                     style="width: 260px; height: 360px; object-fit: cover; border-radius: 12px;">
+              {% endif %}
             </div>
-                    <h5 class="card-title mb-2"><strong>Имя:</strong> {{ d.surname }} {{ d.name }} {{ d.patronymic }}</h5>
-                    <p class="card-text mb-1"><strong>Должность:</strong> {{ d.job_title }}</p>
-                    <p class="card-text mb-2"><strong>Опыт работы:</strong> {{ d.experience }} лет</p>
-                    <a href="{{ d.get_absolute_url }}" class="btn btn-primary mt-auto">Подробнее</a>
-                </div>
-            </div>
+            <h5 class="card-title mb-2">
+              <strong>Имя:</strong> {{ d.surname }} {{ d.name }} {{ d.patronymic }}
+            </h5>
+            <p class="card-text mb-1"><strong>Должность:</strong> {{ d.job_title }}</p>
+            <p class="card-text mb-2"><strong>Опыт работы:</strong> {{ d.experience }} лет</p>
+            <a href="{{ d.get_absolute_url }}" class="btn btn-primary mt-auto">Подробнее</a>
+          </div>
         </div>
-        {% endif %}
-    {% endfor %}
+      </div>
+    {% endif %}
+  {% empty %}
+    <p class="text-center text-muted">Пока нет врачей, отмеченных как менеджеры.</p>
+  {% endfor %}
 </div>
+{% if doctor_page_obj.has_other_pages %}
+  <nav aria-label="Sale pagination" class="mt-4">
+    <ul class="pagination justify-content-center">
+
+      {% if doctor_page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?doctor_page={{ doctor_page_obj.previous_page_number }}" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <span class="page-link" aria-hidden="true">&laquo;</span>
+        </li>
+      {% endif %}
+
+      {% for num in doctor_page_obj.paginator.page_range %}
+        {% if num == doctor_page_obj.number %}
+          <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+        {% else %}
+          <li class="page-item">
+            <a class="page-link" href="?doctor_page={{ num }}">{{ num }}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+
+      {% if doctor_page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?doctor_page={{ doctor_page.next_page_number }}" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <span class="page-link" aria-hidden="true">&raquo;</span>
+        </li>
+      {% endif %}
+
+    </ul>
+  </nav>
+{% endif %}
 
 {% endblock %}
