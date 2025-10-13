@@ -5,6 +5,7 @@ from django.urls import reverse_lazy
 from .models.services import Services, Direction, Order
 from .models.doctors import Doctors
 from .models.appointment import Appointment
+from .models.news import News
 from .forms import AppointmentForm, RegistrationForm,ServicesForm
 from django.views.generic.edit import CreateView,FormView
 from django.core.paginator import Paginator
@@ -12,7 +13,6 @@ from django.contrib.auth.decorators import login_required
 
 
 menu = [
-    {'title': 'О центре', 'url_name': 'about'},
     {'title': 'Услуги', 'url_name': 'services'},
     {'title': 'Врачи', 'url_name': 'doctors'},
     {'title': 'Новости', 'url_name': 'news'},
@@ -26,7 +26,6 @@ def get_filtered_services(doc_slug=None, dir_slug=None, sale_param=None):
 
     selected_doc = None
     selected_dir = None
-    selected_sale = None
 
     if doc_slug:
         selected_doc = get_object_or_404(Doctors, slug=doc_slug)
@@ -46,7 +45,8 @@ def main_page(request):
     services, _, _ = get_filtered_services()
     
     doctors = Doctors.objects.all().order_by('-experience')
-    
+    news = News.objects.all()
+
     sale = services.filter(on_sale = Services.OnSale.SALEYES) 
     manager = doctors.filter(manager = Doctors.Managers.YES)
 
@@ -59,6 +59,10 @@ def main_page(request):
     doctor_page =request.GET.get('doctor_page')
     doctor_page_obj = doctor_paginator.get_page(doctor_page)
 
+    news_paginator = Paginator(news,2)
+    news_page = request.GET.get('news_page')
+    news_page_obj = news_paginator.get_page(news_page)
+
     return render(request, 'Voka/main_page.html', {
         'title': 'Главная страница',
         'menu': menu,
@@ -68,6 +72,7 @@ def main_page(request):
         'YES': Doctors.Managers.YES,
         'sale_page_obj':sale_page_obj,
         'doctor_page_obj':doctor_page_obj,
+        'news_page_obj':news_page_obj,
     })
 
 def services(request):
@@ -167,16 +172,11 @@ def order_delete(request, pk):
     if request.method == "POST":
         order.delete() 
         return redirect("profile")  
-    
-def about(request):
-    return render(request, 'Voka/about.html', {
-        'title': 'О нас',
-        'menu': menu,
-    })
+
 
 
 @login_required
-def appointment(request, service_id=None):
+def appointment(request):
     if request.method == 'POST':
         form = AppointmentForm(request.POST)
         if form.is_valid():
@@ -200,10 +200,21 @@ def appointment(request, service_id=None):
     })
 
 
-
-
 def news(request):
-    return HttpResponse("Новости")
+    news = News.objects.all()
+    return render(request, 'Voka/news.html',{
+        'title':"Новости",
+        "menu":menu,
+        "news":news,
+    })
+
+def news_detail(request,news_slug):
+    news = get_object_or_404(News, slug=news_slug)
+    return render(request, 'Voka/news_detail.html',{
+        'title':"Новости",
+        "menu":menu,
+        "news":news,
+    })
 
 @login_required
 def profile(request):

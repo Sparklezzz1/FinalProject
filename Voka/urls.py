@@ -5,11 +5,11 @@ from django.conf import settings
 
 urlpatterns = [
     path('', views.main_page, name="main_page"),
-    path('about/', views.about, name="about"),
     path('services/', views.services, name="services"),
     path('doctors/', views.doctors, name="doctors"),
     path('doc/<slug:doc_slug>/', views.show_docs, name="doc"),  
     path('news/', views.news, name="news"),
+    path('news/<slug:news_slug>/', views.news_detail, name="news_detail"),
     path('serv/<slug:serv_slug>/', views.show_serv, name="serv"),
     path('appointment/', views.appointment, name='appointment'),
     path('appointment/<int:service_id>/', views.appointment, name='appointment_with_service'),

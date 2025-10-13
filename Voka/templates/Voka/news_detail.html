@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <div class="card shadow-sm border-0">
+                {% if news.image %}
+                <img src="{{ news.image.url }}" class="card-img-top" alt="{{ news.title }}">
+                {% else %}
+                <img src="{% static 'news/default.jpg' %}" class="card-img-top" alt="default image">
+                {% endif %}
+                <div class="card-body">
+                    <h1 class="card-title mb-3">{{ news.title }}</h1>
+                    <p class="text-muted small mb-4">
+                        Опубликовано: {{ news.date_create|date:"d.m.Y" }}
+                    </p>
+
+                
+                    <div class="card-text fs-5">
+                        {{ news.content|linebreaks }}
+                    </div>
+
+                    <div class="mt-4">
+                        <a href="{% url 'news' %}" class="btn btn-outline-primary">
+                            ← Вернуться к новостям
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

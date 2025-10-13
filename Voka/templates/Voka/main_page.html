@@ -3,25 +3,23 @@
 {% load voka_tags %}
 
 {% block content %}
-<h1 class="mb-4">{{ title }}</h1>
+<h1 class="mb-4 text-start">{{ title }}</h1>
 
-
-<div class="h3 mb-3">Сейчас на скидке</div>
+<!-- ===================== АКЦИИ ===================== -->
+<div class="h3 mb-3 text-start">Сейчас на скидке</div>
 
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
   {% for s in sale_page_obj %}
     {% if s.on_sale == SALEYES %}
       <div class="col">
-        <div class="card h-100 shadow-sm d-flex flex-column">
-          <div class="card-body d-flex flex-column">
-
-            <h5 class="card-title">{{ s.title }}</h5>
-
-            {% if s.image %}
-              <img src="{{ s.image.url }}" alt="{{ s.title }}" class="service-img mb-2">
-            {% else %}
-              <img src="{% static 'Voka/images/default.jpg' %}" alt="{{ s.title }}" class="service-img mb-2">
-            {% endif %}
+        <div class="card h-100 shadow-sm d-flex flex-column border-0">
+          {% if s.image %}
+            <img src="{{ s.image.url }}" alt="{{ s.title }}" class="service-img rounded-top" style="height: 220px; object-fit: cover;">
+          {% else %}
+            <img src="{% static 'Voka/images/default.jpg' %}" alt="{{ s.title }}" class="service-img rounded-top" style="height: 220px; object-fit: cover;">
+          {% endif %}
+          <div class="card-body d-flex flex-column text-start">
+            <h5 class="card-title fw-semibold">{{ s.title }}</h5>
 
             {% if s.sale_price %}
               <p class="card-text text-danger mb-1">
@@ -36,10 +34,10 @@
 
             {% if s.doctors.exists %}
               <p class="fw-bold mb-1">Врачи, оказывающие услугу:</p>
-              <ul class="list-group list-group-flush mb-2 flex-grow-0">
+              <ul class="list-group list-group-flush mb-2">
                 {% for doc in s.doctors.all %}
-                  <li class="list-group-item py-1">
-                    <a href="{{ doc.get_absolute_url }}">{{ doc.name }} {{ doc.surname }}</a>
+                  <li class="list-group-item py-1 border-0">
+                    <a href="{{ doc.get_absolute_url }}" class="text-decoration-none">{{ doc.name }} {{ doc.surname }}</a>
                   </li>
                 {% endfor %}
               </ul>
@@ -48,12 +46,9 @@
             {% endif %}
 
             <div class="mt-auto d-flex flex-column gap-2">
-              <a href="{{ s.get_absolute_url }}" class="btn btn-primary d-block">Подробнее</a>
-              <a href="{% url 'appointment_with_service' s.id %}" class="btn btn-success d-block">
-                Записаться на приём
-              </a>
+              <a href="{{ s.get_absolute_url }}" class="btn btn-primary">Подробнее</a>
+              <a href="{% url 'appointment_with_service' s.id %}" class="btn btn-success">Записаться на приём</a>
             </div>
-
           </div>
         </div>
       </div>
@@ -63,73 +58,51 @@
   {% endfor %}
 </div>
 
-
 {% if sale_page_obj.has_other_pages %}
   <nav aria-label="Sale pagination" class="mt-4">
     <ul class="pagination justify-content-center">
-
       {% if sale_page_obj.has_previous %}
-        <li class="page-item">
-          <a class="page-link" href="?sale_page={{ sale_page_obj.previous_page_number }}" aria-label="Previous">
-            <span aria-hidden="true">&laquo;</span>
-          </a>
-        </li>
+        <li class="page-item"><a class="page-link" href="?sale_page={{ sale_page_obj.previous_page_number }}">&laquo;</a></li>
       {% else %}
-        <li class="page-item disabled">
-          <span class="page-link" aria-hidden="true">&laquo;</span>
-        </li>
+        <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
       {% endif %}
-
       {% for num in sale_page_obj.paginator.page_range %}
         {% if num == sale_page_obj.number %}
           <li class="page-item active"><span class="page-link">{{ num }}</span></li>
         {% else %}
-          <li class="page-item">
-            <a class="page-link" href="?sale_page={{ num }}">{{ num }}</a>
-          </li>
+          <li class="page-item"><a class="page-link" href="?sale_page={{ num }}">{{ num }}</a></li>
         {% endif %}
       {% endfor %}
-
       {% if sale_page_obj.has_next %}
-        <li class="page-item">
-          <a class="page-link" href="?sale_page={{ sale_page_obj.next_page_number }}" aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
-          </a>
-        </li>
+        <li class="page-item"><a class="page-link" href="?sale_page={{ sale_page_obj.next_page_number }}">&raquo;</a></li>
       {% else %}
-        <li class="page-item disabled">
-          <span class="page-link" aria-hidden="true">&raquo;</span>
-        </li>
+        <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
       {% endif %}
-
     </ul>
   </nav>
 {% endif %}
 
 <hr class="my-5">
 
-<div class="h3 mb-3">Наши врачи</div>
-<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+<!-- ===================== ВРАЧИ ===================== -->
+<div class="h3 mb-3 text-start">Наши врачи</div>
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 text-start">
   {% for d in doctor_page_obj %}
     {% if d.manager == YES %}
       <div class="col">
-        <div class="card h-100 shadow-sm">
-          <div class="card-body d-flex flex-column">
-            <div class="col-md-4 text-center bg-light py-4">
-              {% if d.image %}
-                <img src="{{ d.image.url }}" alt="{{ d.surname }} {{ d.name }}"
-                     style="width: 260px; height: 360px; object-fit: cover; border-radius: 12px;">
-              {% else %}
-                <img src="{% static 'Voka/images/default.jpg' %}" alt="{{ d.surname }} {{ d.name }}"
-                     style="width: 260px; height: 360px; object-fit: cover; border-radius: 12px;">
-              {% endif %}
-            </div>
-            <h5 class="card-title mb-2">
-              <strong>Имя:</strong> {{ d.surname }} {{ d.name }} {{ d.patronymic }}
-            </h5>
+        <div class="card h-100 shadow-sm border-0">
+          <div class="d-flex justify-content-center bg-light p-3 rounded-top">
+            {% if d.image %}
+              <img src="{{ d.image.url }}" alt="{{ d.surname }} {{ d.name }}" class="rounded" style="width: 260px; height: 360px; object-fit: cover;">
+            {% else %}
+              <img src="{% static 'Voka/images/default.jpg' %}" alt="{{ d.surname }} {{ d.name }}" class="rounded" style="width: 260px; height: 360px; object-fit: cover;">
+            {% endif %}
+          </div>
+          <div class="card-body text-start">
+            <h5 class="card-title mt-2"><strong>{{ d.surname }} {{ d.name }} {{ d.patronymic }}</strong></h5>
             <p class="card-text mb-1"><strong>Должность:</strong> {{ d.job_title }}</p>
-            <p class="card-text mb-2"><strong>Опыт работы:</strong> {{ d.experience }} лет</p>
-            <a href="{{ d.get_absolute_url }}" class="btn btn-primary mt-auto">Подробнее</a>
+            <p class="card-text mb-3"><strong>Опыт:</strong> {{ d.experience }} лет</p>
+            <a href="{{ d.get_absolute_url }}" class="btn btn-primary w-100 mt-auto">Подробнее</a>
           </div>
         </div>
       </div>
@@ -138,46 +111,167 @@
     <p class="text-center text-muted">Пока нет врачей, отмеченных как менеджеры.</p>
   {% endfor %}
 </div>
+
 {% if doctor_page_obj.has_other_pages %}
-  <nav aria-label="Sale pagination" class="mt-4">
+  <nav aria-label="Doctor pagination" class="mt-4">
     <ul class="pagination justify-content-center">
-
       {% if doctor_page_obj.has_previous %}
-        <li class="page-item">
-          <a class="page-link" href="?doctor_page={{ doctor_page_obj.previous_page_number }}" aria-label="Previous">
-            <span aria-hidden="true">&laquo;</span>
-          </a>
-        </li>
+        <li class="page-item"><a class="page-link" href="?doctor_page={{ doctor_page_obj.previous_page_number }}">&laquo;</a></li>
       {% else %}
-        <li class="page-item disabled">
-          <span class="page-link" aria-hidden="true">&laquo;</span>
-        </li>
+        <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
       {% endif %}
-
       {% for num in doctor_page_obj.paginator.page_range %}
         {% if num == doctor_page_obj.number %}
           <li class="page-item active"><span class="page-link">{{ num }}</span></li>
         {% else %}
-          <li class="page-item">
-            <a class="page-link" href="?doctor_page={{ num }}">{{ num }}</a>
-          </li>
+          <li class="page-item"><a class="page-link" href="?doctor_page={{ num }}">{{ num }}</a></li>
         {% endif %}
       {% endfor %}
-
       {% if doctor_page_obj.has_next %}
-        <li class="page-item">
-          <a class="page-link" href="?doctor_page={{ doctor_page.next_page_number }}" aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
-          </a>
-        </li>
+        <li class="page-item"><a class="page-link" href="?doctor_page={{ doctor_page_obj.next_page_number }}">&raquo;</a></li>
       {% else %}
-        <li class="page-item disabled">
-          <span class="page-link" aria-hidden="true">&raquo;</span>
-        </li>
+        <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
       {% endif %}
-
     </ul>
   </nav>
 {% endif %}
+
+<hr class="my-5">
+
+<!-- ===================== НОВОСТИ ===================== -->
+<div class="h3 mb-4 text-start">Новости</div>
+
+<div class="row row-cols-1 row-cols-md-2 g-4 justify-content-center text-start">
+  {% for n in news_page_obj %}
+    <div class="col-12 col-md-6 d-flex justify-content-center">
+      <div class="card h-100 shadow-sm border-0" style="width: 90%; max-width: 600px;">
+        <div class="d-flex justify-content-center bg-light py-3 rounded-top">
+          {% if n.image %}
+            <img src="{{ n.image.url }}" alt="{{ n.title }}"
+                 style="width: 260px; height: 360px; object-fit: cover; border-radius: 12px;">
+          {% else %}
+            <img src="{% static 'Voka/images/default.jpg' %}" alt="{{ n.title }}"
+                 style="width: 260px; height: 360px; object-fit: cover; border-radius: 12px;">
+          {% endif %}
+        </div>
+        <div class="card-body d-flex flex-column px-4 pb-4">
+          <h5 class="card-title mt-3 fw-semibold">{{ n.title }}</h5>
+          <p class="card-text mb-2 text-muted small">{{ n.date_create }}</p>
+          <p class="card-text flex-grow-1">{{ n.content|truncatechars:180 }}</p>
+          <a href="{{ n.get_absolute_url }}" class="btn btn-primary mt-auto align-self-start">Подробнее</a>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <p class="text-center text-muted">Пока нет новостей.</p>
+  {% endfor %}
+</div>
+
+{% if news_page_obj.has_other_pages %}
+  <nav aria-label="News pagination" class="mt-5">
+    <ul class="pagination justify-content-center">
+      {% if news_page_obj.has_previous %}
+        <li class="page-item"><a class="page-link" href="?news_page={{ news_page_obj.previous_page_number }}">&laquo;</a></li>
+      {% else %}
+        <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+      {% endif %}
+      {% for num in news_page_obj.paginator.page_range %}
+        {% if num == news_page_obj.number %}
+          <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+        {% else %}
+          <li class="page-item"><a class="page-link" href="?news_page={{ num }}">{{ num }}</a></li>
+        {% endif %}
+      {% endfor %}
+      {% if news_page_obj.has_next %}
+        <li class="page-item"><a class="page-link" href="?news_page={{ news_page_obj.next_page_number }}">&raquo;</a></li>
+      {% else %}
+        <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+      {% endif %}
+    </ul>
+  </nav>
+{% endif %}
+
+<hr class="my-5">
+
+<!-- ===================== ПРЕИМУЩЕСТВА ===================== -->
+<div class="container my-5">
+  <h2 class="mb-4 text-start">Преимущества клиники</h2>
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 text-start">
+    <div class="col">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body">
+          <div class="text-primary mb-3 fs-1"><i class="bi bi-person-badge-fill"></i></div>
+          <h5 class="card-title">Опытные врачи</h5>
+          <p class="card-text">Лечение проводят офтальмологи высшей категории, кандидаты и доктора медицинских наук.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body">
+          <div class="text-primary mb-3 fs-1"><i class="bi bi-activity"></i></div>
+          <h5 class="card-title">Точная диагностика</h5>
+          <p class="card-text">Обследование проводится с использованием офтальмологического оборудования ведущих мировых производителей.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body">
+          <div class="text-primary mb-3 fs-1"><i class="bi bi-heart-pulse-fill"></i></div>
+          <h5 class="card-title">Эффективное лечение</h5>
+          <p class="card-text">Индивидуальный подход и наблюдение лечащего врача под руководством профессора.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body">
+          <div class="text-primary mb-3 fs-1"><i class="bi bi-hospital"></i></div>
+          <h5 class="card-title">Современное оборудование</h5>
+          <p class="card-text">Центр оснащён современными технологиями, позволяющими выполнять операции быстро и безболезненно.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body">
+          <div class="text-primary mb-3 fs-1"><i class="bi bi-cash-stack"></i></div>
+          <h5 class="card-title">Доступные цены</h5>
+          <p class="card-text">Наши цены доступны для большинства жителей Республики Беларусь.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body">
+          <div class="text-primary mb-3 fs-1"><i class="bi bi-house-heart-fill"></i></div>
+          <h5 class="card-title">Комфортная обстановка</h5>
+          <p class="card-text">В центре создана атмосфера уюта и безопасности. Есть удобный подъезд и парковка.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<style>
+  .card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.08);
+  }
+  .card-body {
+    padding: 1.75rem;
+  }
+</style>
 
 {% endblock %}
