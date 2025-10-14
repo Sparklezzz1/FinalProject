@@ -1,0 +1,62 @@
+
+body {
+    background-color: #181818;
+    color: #e0e0e0;
+}
+
+.navbar, footer {
+    background-color: #242424 !important;
+    color: #f0f0f0;
+}
+
+
+.card {
+    background-color: #1f1f1f;
+    color: #e0e0e0;
+}
+
+.card.shadow-sm {
+    background-color: #2a2a2a !important;
+}
+
+
+.btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    color: #fff;
+}
+
+.btn-outline-primary {
+    color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+.btn[style*="linear-gradient"] {
+    color: #fff;
+}
+
+
+.list-group-item {
+    background-color: #262626;
+    color: #e0e0e0;
+    border-color: #444;
+}
+
+.list-group-item a {
+    color: #80bfff;
+}
+
+.text-muted, small {
+    color: #b0b0b0 !important;
+}
+
+
+.alert {
+    background-color: #262626;
+    color: #e0e0e0;
+    border-color: #444;
+}

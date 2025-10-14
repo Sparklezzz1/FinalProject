@@ -15,6 +15,13 @@
           rel="stylesheet" 
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" 
           crossorigin="anonymous">
+
+    {% if request.session.darkmode %}
+    <link rel="stylesheet" href="{% static 'Voka/css/dark.css' %}">
+    {% else %}
+    <link rel="stylesheet" href="{% static 'Voka/css/light.css' %}">
+    {% endif %}
+
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -52,6 +59,9 @@
                   <a class="nav-link" href="{% url 'login' %}">Войти</a>
                 {% endif %}
             </ul>
+            <a href="{% url 'toggle_theme' %}" class="btn btn-outline-light ms-3">
+                {% if request.session.darkmode %} Светлая тема {% else %} Тёмная тема {% endif %}
+            </a>
         </div>
     </div>
 </nav>
@@ -60,7 +70,7 @@
     {% block content %}{% endblock %}
 </div>
 
-<footer class="navbar-expand-lg navbar-dark bg-primary py-4 mt-auto text-center">
+<footer id="main-footer" class="navbar-expand-lg navbar-dark py-4 mt-auto text-center">
   <div class="container">
     <div class="row">
       <div class="col-md-4 mb-3 mb-md-0">

@@ -67,7 +67,6 @@ class Direction(models.Model):
 class Order(models.Model):
     user = models.ForeignKey(User, verbose_name="Пользователь", on_delete=models.PROTECT)
     service = models.ForeignKey(Services, verbose_name="Услуга", on_delete=models.PROTECT)
-    doctor = models.ManyToManyField()
 
     def __str__(self):
         return f"{self.user.username} - {self.service.title}"

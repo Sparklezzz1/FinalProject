@@ -18,4 +18,5 @@ urlpatterns = [
     path('services/<int:service_id>/edit/', views.service_edit, name='service_edit'),
     path('registration/', views.Registration.as_view(), name = "registration"),
     path('profile/', views.profile, name = 'profile'),
+     path('toggle-theme/', views.toggle_theme, name='toggle_theme'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
