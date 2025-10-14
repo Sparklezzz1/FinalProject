@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Voka',
     'django_extensions',
+    "widget_tweaks",
 ]
 
 MIDDLEWARE = [

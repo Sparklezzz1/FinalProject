@@ -12,7 +12,6 @@ urlpatterns = [
     path('news/<slug:news_slug>/', views.news_detail, name="news_detail"),
     path('serv/<slug:serv_slug>/', views.show_serv, name="serv"),
     path('appointment/', views.appointment, name='appointment'),
-    path('appointment/<int:service_id>/', views.appointment, name='appointment_with_service'),
     path('services_form/', views.services_create, name = "services_create"),
     path('services/<int:pk>/delete/', views.service_delete, name='service_delete'),
     path('order/<int:pk>/delete/', views.order_delete, name='order_delete'),

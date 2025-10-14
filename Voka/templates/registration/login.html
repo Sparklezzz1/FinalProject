@@ -1,33 +1,53 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
+
 {% block content %}
+<div class="container mt-5 d-flex justify-content-center">
+  <div class="card shadow-lg p-4" style="max-width: 420px; width: 100%;">
+    <h3 class="text-center mb-4">Вход в аккаунт</h3>
 
-{% if form.errors %}
-<p>Ваши имя или пароль не найдены. Попробуйте еще раз.</p>
-{% endif %}
-
-{% if next %}
-    {% if user.is_authenticated %}
-    <p>У вас нет доступа к этой странице. Что бы продолжить, пожалуйста войдите в аккаунт с данным доступом.</p>
-    {% else %}
-    <p>Пожалуйста войдите в аккаунт, что бы увидеть страницу.</p>
+    {% if form.errors %}
+      <div class="alert alert-danger" role="alert">
+        Неверное имя пользователя или пароль. Попробуйте ещё раз.
+      </div>
     {% endif %}
-{% endif %}
 
-<form method="post" action="{% url 'login' %}">
-    {% csrf_token %}
-<table>
-    <tr>
-        <td>{{ form.username.label_tag }}</td>
-        <td>{{ form.username }}</td>
-    </tr>
-    <tr>
-        <td>{{ form.password.label_tag }}</td>
-        <td>{{ form.password }}</td>
-    </tr>
-</table>
+    {% if next %}
+      {% if user.is_authenticated %}
+        <div class="alert alert-warning" role="alert">
+          У вас нет доступа к этой странице. Войдите в аккаунт с соответствующими правами.
+        </div>
+      {% else %}
+        <div class="alert alert-info" role="alert">
+          Пожалуйста, войдите в аккаунт, чтобы продолжить.
+        </div>
+      {% endif %}
+    {% endif %}
 
-<input type="submit" value="Войти">
-<input type="hidden" name="next" value="{{ next }}">
-<a href="{% url 'registration' %}">Создать аккаунт</a>
-</form>
+    <form method="post" action="{% url 'login' %}">
+      {% csrf_token %}
+
+      <div class="mb-3">
+        {{ form.username.label_tag }}
+        {{ form.username|add_class:"form-control" }}
+      </div>
+
+      <div class="mb-3">
+        {{ form.password.label_tag }}
+        {{ form.password|add_class:"form-control" }}
+      </div>
+
+      <input type="hidden" name="next" value="{{ next }}">
+
+      <div class="d-grid gap-2 mb-3">
+        <button type="submit" class="btn btn-primary btn-lg">Войти</button>
+      </div>
+
+      <div class="text-center">
+        <small class="text-muted">Нет аккаунта?</small>
+        <a href="{% url 'registration' %}" class="link-primary ms-1">Создать</a>
+      </div>
+    </form>
+  </div>
+</div>
 {% endblock %}

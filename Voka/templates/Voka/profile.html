@@ -8,7 +8,7 @@
         <h2>Профиль пользователя</h2>
         <p class="lead">Добро пожаловать, <strong>{{ user.username }}</strong>!</p>
     </div>
-
+   {% if is_user_group %}
     <h3 class="mb-3">Выбранные услуги</h3>
 
     {% if orders %}
@@ -37,6 +37,43 @@
             У вас пока нет выбранных услуг.
         </div>
     {% endif %}
+
+{% elif is_doctor_group %}
+ {% if orders %}
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for order in orders %}
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ order.service.title }}</h5>
+                            <p class="card-text">
+                                Пользователь: {{ order.user.username }}
+                            </p>
+                        </div>
+                        <div class="card-footer text-end">
+                            <form method="post" action="{% url 'order_delete' order.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-danger">Удалить</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info" role="alert">
+            К вам пока нет записи
+        </div>
+    {% endif %}
+
+{% elif is_admin_group %}
+    <div>
+        {% for a in appointment %}
+            <p>{{ a.patient_name }}</p>
+        {% endfor %}
+    </div>
+
+{% endif %}
 
     <div class="mt-4 text-center">
         {% if user.is_authenticated %}

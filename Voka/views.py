@@ -63,6 +63,8 @@ def main_page(request):
     news_page = request.GET.get('news_page')
     news_page_obj = news_paginator.get_page(news_page)
 
+    is_user_group = request.user.groups.filter(name='Users').exists()
+
     return render(request, 'Voka/main_page.html', {
         'title': 'Главная страница',
         'menu': menu,
@@ -73,13 +75,16 @@ def main_page(request):
         'sale_page_obj':sale_page_obj,
         'doctor_page_obj':doctor_page_obj,
         'news_page_obj':news_page_obj,
+        'is_user_group':is_user_group,
     })
 
 def services(request):
     doc_slug = request.GET.get('doctor')
     dir_slug = request.GET.get('directions')
     sale_param = request.GET.get('sale')
-    
+    is_admin_group = request.user.groups.filter(name='Admins').exists()
+    is_user_group = request.user.groups.filter(name='Users').exists()
+
     services, selected_doc, selected_dir = get_filtered_services(doc_slug, dir_slug,sale_param)
     return render(request, 'Voka/services.html', {
         'title': 'Услуги',
@@ -88,6 +93,8 @@ def services(request):
         'selected_doc': selected_doc,
         'selected_dir': selected_dir,
         'sale_param':sale_param,
+        'is_admin_group':is_admin_group,
+        'is_user_group':is_user_group,
     })
 
 
@@ -128,10 +135,13 @@ def service_edit(request, service_id):
 
 def show_serv(request, serv_slug):
     serv = get_object_or_404(Services, slug=serv_slug)
+    is_user_group = request.user.groups.filter(name="Users").exists()
+    
     return render(request, 'Voka/serv.html', {
         'title': serv.title,
         'menu': menu,
         'serv': serv,
+        'is_user_group':is_user_group,
     })
 
 
@@ -218,11 +228,19 @@ def news_detail(request,news_slug):
 
 @login_required
 def profile(request):
+    is_user_group = request.user.groups.filter(name='Users').exists()
+    is_admin_group = request.user.groups.filter(name='Admins').exists()
+    is_doctor_group = request.user.groups.filter(name='Doctors').exists()
+    appointment = Appointment.objects.all()
     orders = Order.objects.filter(user=request.user)
     return render(request, 'Voka/profile.html', {
         'title': 'Профиль',
         'orders' : orders,
         'menu': menu,
+        'appointment': appointment,
+        'is_user_group':is_user_group,
+        'is_admin_group':is_admin_group,
+        'is_doctor_group':is_doctor_group,
     })
 
 class Registration(FormView):
