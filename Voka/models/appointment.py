@@ -1,6 +1,7 @@
 from Voka import models
 from django.db import models
 from django.core.validators import RegexValidator
+from django.utils.translation import gettext_lazy as _
 
 class Appointment(models.Model):
     STATUS_CHOICES = [
@@ -9,19 +10,19 @@ class Appointment(models.Model):
         ('canceled', 'Отменена'),
         ('done', 'Завершена'),
     ]
-    patient_name = models.CharField(verbose_name="Имя пациента", max_length=255, db_index=True)
-    patient_surname = models.CharField(verbose_name="Фамилия пациента", max_length=255, db_index=True)
-    services = models.ForeignKey("Voka.Services",verbose_name="Услуга",   null=True, 
+    patient_name = models.CharField(verbose_name=_("Имя пациента"), max_length=255, db_index=True)
+    patient_surname = models.CharField(verbose_name=_("Фамилия пациента"), max_length=255, db_index=True)
+    services = models.ForeignKey("Voka.Services",verbose_name=_("Услуга"),   null=True, 
         blank=True,on_delete=models.CASCADE,related_name="services_appointments")
-    date = models.DateField(verbose_name="Дата приема", db_index=True)
-    time = models.TimeField(verbose_name="Время приёма", db_index=True)
-    reason = models.TextField(verbose_name="Причина визита", blank=True, null=True)
+    date = models.DateField(verbose_name=_("Дата приема"), db_index=True)
+    time = models.TimeField(verbose_name=_("Время приёма"), db_index=True)
+    reason = models.TextField(verbose_name=_("Причина визита"), blank=True, null=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='new')
-    phone = models.CharField(verbose_name="Номер телефона",max_length=13,
+    phone = models.CharField(verbose_name=_("Номер телефона"),max_length=13,
         validators=[
             RegexValidator(
                 regex=r'^\+375(?:25|29|33|44|17)\d{7}$',
-                message="Введите корректный номер телефона"
+                message=_("Введите корректный номер телефона")
             )
         ],
     )

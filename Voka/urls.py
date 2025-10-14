@@ -1,7 +1,8 @@
-from django.urls import path
+from django.urls import path,include
 from . import views
 from django.conf.urls.static import static
 from django.conf import settings
+from django.conf.urls.i18n import i18n_patterns
 
 urlpatterns = [
     path('', views.main_page, name="main_page"),
@@ -18,5 +19,6 @@ urlpatterns = [
     path('services/<int:service_id>/edit/', views.service_edit, name='service_edit'),
     path('registration/', views.Registration.as_view(), name = "registration"),
     path('profile/', views.profile, name = 'profile'),
-     path('toggle-theme/', views.toggle_theme, name='toggle_theme'),
+    path('toggle-theme/', views.toggle_theme, name='toggle_theme'),
+    path('i18n/', include('django.conf.urls.i18n')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

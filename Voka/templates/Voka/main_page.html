@@ -1,12 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load voka_tags %}
+{% load i18n %}
 
 {% block content %}
-<h1 class="mb-4 text-start">{{ title }}</h1>
-
-<div class="h3 mb-3 text-start">Сейчас на скидке</div>
-
+<h1 class="mb-4 text-start">{% trans title %}</h1>
+<div class="h3 mb-3 text-start">{% trans "Сейчас на скидке" %}</div>
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
   {% for s in sale_page_obj %}
     {% if s.on_sale == SALEYES %}
@@ -22,17 +21,17 @@
 
             {% if s.sale_price %}
               <p class="card-text text-danger mb-1">
-                <strong>Цена со скидкой:</strong> {{ s.final_price }} BYN
+                <strong>{% trans "Цена со скидкой" %}:</strong> {{ s.final_price }} BYN
               </p>
               <p class="text-muted text-decoration-line-through mb-2">{{ s.price }} BYN</p>
             {% else %}
-              <p class="card-text mb-2"><strong>Стоимость:</strong> {{ s.price }} BYN</p>
+              <p class="card-text mb-2"><strong>{% trans "Стоимость" %}:</strong> {{ s.price }} BYN</p>
             {% endif %}
 
-            <p class="card-text mb-2"><strong>Направление:</strong> {{ s.direction }}</p>
+            <p class="card-text mb-2"><strong>{% trans "Направление" %}:</strong> {{ s.direction }}</p>
 
             {% if s.doctors.exists %}
-              <p class="fw-bold mb-1">Врачи, оказывающие услугу:</p>
+              <p class="fw-bold mb-1">{% trans "Врачи, оказывающие услугу" %}:</p>
               <ul class="list-group list-group-flush mb-2">
                 {% for doc in s.doctors.all %}
                   <li class="list-group-item py-1 border-0">
@@ -41,13 +40,13 @@
                 {% endfor %}
               </ul>
             {% else %}
-              <p class="text-muted mb-2">Врачи не назначены</p>
+              <p class="text-muted mb-2">{% trans "Врачи не назначены" %}</p>
             {% endif %}
 
             <div class="mt-auto d-flex flex-column gap-2">
-              <a href="{{ s.get_absolute_url }}" class="btn btn-primary">Подробнее</a>
+              <a href="{{ s.get_absolute_url }}" class="btn btn-primary">{% trans "Подробнее" %}</a>
               {% if is_user_group%}
-              <a href="{% url 'appointment' %}" class="btn btn-success">Записаться на приём</a>
+              <a href="{% url 'appointment' %}" class="btn btn-success">{% trans "Записаться на приём" %}</a>
               {% endif %}
             </div>
           </div>
@@ -55,7 +54,7 @@
       </div>
     {% endif %}
   {% empty %}
-    <p class="text-center text-muted">На данный момент акционных услуг нет.</p>
+    <p class="text-center text-muted">{% trans "На данный момент акционных услуг нет" %}.</p>
   {% endfor %}
 </div>
 
@@ -85,7 +84,7 @@
 
 <hr class="my-5">
 
-<div class="h3 mb-3 text-start">Наши врачи</div>
+<div class="h3 mb-3 text-start">{% trans "Наши врачи" %}</div>
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 text-start">
   {% for d in doctor_page_obj %}
     {% if d.manager == YES %}
@@ -100,15 +99,15 @@
           </div>
           <div class="card-body text-start">
             <h5 class="card-title mt-2"><strong>{{ d.surname }} {{ d.name }} {{ d.patronymic }}</strong></h5>
-            <p class="card-text mb-1"><strong>Должность:</strong> {{ d.job_title }}</p>
-            <p class="card-text mb-3"><strong>Опыт:</strong> {{ d.experience }} лет</p>
-            <a href="{{ d.get_absolute_url }}" class="btn btn-primary w-100 mt-auto">Подробнее</a>
+            <p class="card-text mb-1"><strong>{% trans "Должность" %}:</strong> {{ d.job_title }}</p>
+            <p class="card-text mb-3"><strong>{% trans "Опыт" %}:</strong> {{ d.experience }} {% trans "лет" %}</p>
+            <a href="{{ d.get_absolute_url }}" class="btn btn-primary w-100 mt-auto">{% trans "Подробнее" %}</a>
           </div>
         </div>
       </div>
     {% endif %}
   {% empty %}
-    <p class="text-center text-muted">Пока нет врачей, отмеченных как менеджеры.</p>
+    <p class="text-center text-muted">{% trans "Пока нет врачей, отмеченных как менеджеры" %}.</p>
   {% endfor %}
 </div>
 
@@ -139,14 +138,14 @@
 <hr class="my-5">
 
 <div class="container my-5">
-  <h2 class="mb-4 text-start">Преимущества клиники</h2>
+  <h2 class="mb-4 text-start">{% trans "Преимущества клиники" %}</h2>
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 text-start">
     <div class="col">
       <div class="card h-100 shadow-sm border-0">
         <div class="card-body">
           <div class="text-primary mb-3 fs-1"><i class="bi bi-person-badge-fill"></i></div>
-          <h5 class="card-title">Опытные врачи</h5>
-          <p class="card-text">Лечение проводят офтальмологи высшей категории, кандидаты и доктора медицинских наук.</p>
+          <h5 class="card-title">{% trans "Опытные врачи" %}</h5>
+          <p class="card-text">{% trans "Лечение проводят офтальмологи высшей категории, кандидаты и доктора медицинских наук" %}.</p>
         </div>
       </div>
     </div>
@@ -155,8 +154,8 @@
       <div class="card h-100 shadow-sm border-0">
         <div class="card-body">
           <div class="text-primary mb-3 fs-1"><i class="bi bi-activity"></i></div>
-          <h5 class="card-title">Точная диагностика</h5>
-          <p class="card-text">Обследование проводится с использованием офтальмологического оборудования ведущих мировых производителей.</p>
+          <h5 class="card-title">{% trans "Точная диагностика" %}</h5>
+          <p class="card-text">{% trans "Обследование проводится с использованием офтальмологического оборудования ведущих мировых производителей" %}.</p>
         </div>
       </div>
     </div>
@@ -165,8 +164,8 @@
       <div class="card h-100 shadow-sm border-0">
         <div class="card-body">
           <div class="text-primary mb-3 fs-1"><i class="bi bi-heart-pulse-fill"></i></div>
-          <h5 class="card-title">Эффективное лечение</h5>
-          <p class="card-text">Индивидуальный подход и наблюдение лечащего врача под руководством профессора.</p>
+          <h5 class="card-title">{% trans "Эффективное лечение" %}</h5>
+          <p class="card-text">{% trans "Индивидуальный подход и наблюдение лечащего врача под руководством профессора" %}.</p>
         </div>
       </div>
     </div>
@@ -175,8 +174,8 @@
       <div class="card h-100 shadow-sm border-0">
         <div class="card-body">
           <div class="text-primary mb-3 fs-1"><i class="bi bi-hospital"></i></div>
-          <h5 class="card-title">Современное оборудование</h5>
-          <p class="card-text">Центр оснащён современными технологиями, позволяющими выполнять операции быстро и безболезненно.</p>
+          <h5 class="card-title">{% trans "Современное оборудование" %}</h5>
+          <p class="card-text">{% trans "Центр оснащён современными технологиями, позволяющими выполнять операции быстро и безболезненно" %}.</p>
         </div>
       </div>
     </div>
@@ -185,8 +184,8 @@
       <div class="card h-100 shadow-sm border-0">
         <div class="card-body">
           <div class="text-primary mb-3 fs-1"><i class="bi bi-cash-stack"></i></div>
-          <h5 class="card-title">Доступные цены</h5>
-          <p class="card-text">Наши цены доступны для большинства жителей Республики Беларусь.</p>
+          <h5 class="card-title">{% trans "Доступные цены" %}</h5>
+          <p class="card-text">{% trans "Наши цены доступны для большинства жителей Республики Беларусь" %}.</p>
         </div>
       </div>
     </div>
@@ -195,8 +194,8 @@
       <div class="card h-100 shadow-sm border-0">
         <div class="card-body">
           <div class="text-primary mb-3 fs-1"><i class="bi bi-house-heart-fill"></i></div>
-          <h5 class="card-title">Комфортная обстановка</h5>
-          <p class="card-text">В центре создана атмосфера уюта и безопасности. Есть удобный подъезд и парковка.</p>
+          <h5 class="card-title">{% trans "Комфортная обстановка" %}</h5>
+          <p class="card-text">{% trans "В центре создана атмосфера уюта и безопасности. Есть удобный подъезд и парковка" %}.</p>
         </div>
       </div>
     </div>
@@ -205,7 +204,7 @@
 
 <hr class="my-5">
 
-<div class="h3 mb-4 text-start">Новости</div>
+<div class="h3 mb-4 text-start">{% trans "Новости" %}</div>
 
 <div class="row row-cols-1 row-cols-md-2 g-4 justify-content-center text-start">
   {% for n in news_page_obj %}
@@ -224,12 +223,12 @@
           <h5 class="card-title mt-3 fw-semibold">{{ n.title }}</h5>
           <p class="card-text mb-2 text-muted small">{{ n.date_create }}</p>
           <p class="card-text flex-grow-1">{{ n.content|truncatechars:180 }}</p>
-          <a href="{{ n.get_absolute_url }}" class="btn btn-primary mt-auto align-self-start">Подробнее</a>
+          <a href="{{ n.get_absolute_url }}" class="btn btn-primary mt-auto align-self-start">{% trans "Подробнее" %}</a>
         </div>
       </div>
     </div>
   {% empty %}
-    <p class="text-center text-muted">Пока нет новостей.</p>
+    <p class="text-center text-muted">{% trans "Пока нет новостей" %}.</p>
   {% endfor %}
 </div>
 

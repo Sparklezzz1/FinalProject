@@ -1,15 +1,16 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
+
 {% block content %}
 <div class="container mt-5">
 
     <div class="text-center mb-4">
-        <h2>Профиль пользователя</h2>
-        <p class="lead">Добро пожаловать, <strong>{{ user.username }}</strong>!</p>
+        <h2>{% trans "Профиль пользователя" %}</h2>
+        <p class="lead">{% trans "Добро пожаловать," %} <strong>{{ user.username }}</strong>!</p>
     </div>
    {% if is_user_group %}
-    <h3 class="mb-3">Выбранные услуги</h3>
+    <h3 class="mb-3">{% trans "Выбранные услуги" %}</h3>
 
     {% if orders %}
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
@@ -19,13 +20,13 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ order.service.title }}</h5>
                             <p class="card-text">
-                                Пользователь: {{ order.user.username }}
+                               {% trans "Пользователь" %} : {{ order.user.username }}
                             </p>
                         </div>
                         <div class="card-footer text-end">
                             <form method="post" action="{% url 'order_delete' order.id %}">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-sm btn-danger">Удалить</button>
+                                <button type="submit" class="btn btn-sm btn-danger">{% trans "Удалить" %}</button>
                             </form>
                         </div>
                     </div>
@@ -34,7 +35,7 @@
         </div>
     {% else %}
         <div class="alert alert-info" role="alert">
-            У вас пока нет выбранных услуг.
+            {% trans "У вас пока нет выбранных услуг." %}
         </div>
     {% endif %}
 
@@ -47,13 +48,13 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ order.service.title }}</h5>
                             <p class="card-text">
-                                Пользователь: {{ order.user.username }}
+                                {% trans "Пользователь" %}: {{ order.user.username }}
                             </p>
                         </div>
                         <div class="card-footer text-end">
                             <form method="post" action="{% url 'order_delete' order.id %}">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-sm btn-danger">Удалить</button>
+                                <button type="submit" class="btn btn-sm btn-danger">{% trans "Удалить" %}</button>
                             </form>
                         </div>
                     </div>
@@ -62,7 +63,7 @@
         </div>
     {% else %}
         <div class="alert alert-info" role="alert">
-            К вам пока нет записи
+            {% trans "К вам пока нет записи" %}
         </div>
     {% endif %}
 
@@ -79,7 +80,7 @@
         {% if user.is_authenticated %}
             <form method="post" action="{% url 'logout' %}">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-outline-danger btn-lg">Выйти</button>
+                <button type="submit" class="btn btn-outline-danger btn-lg">{% trans "Выйти" %}</button>
             </form>
         {% endif %}
     </div>

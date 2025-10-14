@@ -1,22 +1,22 @@
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
-from django.http import HttpResponse, HttpResponseNotFound
 from django.urls import reverse_lazy
+from django.views.generic.edit import FormView
+from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
+from django.utils.translation import gettext as _ 
 from .models.services import Services, Direction, Order
 from .models.doctors import Doctors
 from .models.appointment import Appointment
 from .models.news import News
-from .forms import AppointmentForm, RegistrationForm,ServicesForm
-from django.views.generic.edit import CreateView,FormView
-from django.core.paginator import Paginator
-from django.contrib.auth.decorators import login_required
+from .forms import AppointmentForm, RegistrationForm, ServicesForm
 
 
 menu = [
-    {'title': 'Услуги', 'url_name': 'services'},
-    {'title': 'Врачи', 'url_name': 'doctors'},
-    {'title': 'Новости', 'url_name': 'news'},
-    {'title': 'Запись на прием', 'url_name': 'appointment'},
+    {'title': _('Услуги'), 'url_name': 'services'},
+    {'title': _('Врачи'), 'url_name': 'doctors'},
+    {'title': _('Новости'), 'url_name': 'news'},
+    {'title': _('Запись на прием'), 'url_name': 'appointment'},
 ]
 
 
@@ -42,7 +42,7 @@ def get_filtered_services(doc_slug=None, dir_slug=None, sale_param=None):
 
 
 def main_page(request):
-    services, _, _ = get_filtered_services()
+    services, selected_doc, selected_dir  = get_filtered_services()
     
     doctors = Doctors.objects.all().order_by('-experience')
     news = News.objects.all()
@@ -66,7 +66,7 @@ def main_page(request):
     is_user_group = request.user.groups.filter(name='Users').exists()
 
     return render(request, 'Voka/main_page.html', {
-        'title': 'Главная страница',
+        'title': _('Главная страница'),
         'menu': menu,
         'services': services,   
         'manager':manager,
@@ -83,9 +83,10 @@ def services(request):
     dir_slug = request.GET.get('directions')
     sale_param = request.GET.get('sale')
 
+
     services, selected_doc, selected_dir = get_filtered_services(doc_slug, dir_slug,sale_param)
     return render(request, 'Voka/services.html', {
-        'title': 'Услуги',
+        'title': _('Услуги'),
         'menu': menu,
         'services': services,
         'selected_doc': selected_doc,
@@ -156,7 +157,7 @@ def filter_direction(request, direction_slug):
 def doctors(request):
     doctors = Doctors.objects.all().order_by('-experience')
     return render(request, 'Voka/doctors.html', {
-        'title': 'Врачи',
+        'title': _('Врачи'),
         'menu': menu,
         'doctors': doctors,
     })

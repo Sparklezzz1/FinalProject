@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 {% block content %}
 
 <div class="container my-5">
-    <h1 class="text-center mb-4">Новости</h1>
+    <h1 class="text-center mb-4">{% trans "Новости" %}</h1>
 
     <div class="row g-4">
         {% for item in news %}
@@ -24,14 +25,14 @@
                         {{ item.content|truncatechars:120 }}
                     </p>
                     <a href="{% url 'news_detail' item.slug %}" class="btn btn-primary mt-auto">
-                        Читать далее
+                        {% trans "Читать далее" %}
                     </a>
                 </div>
             </div>
         </div>
         {% empty %}
         <div class="col-12 text-center">
-            <p>Пока нет новостей.</p>
+            <p>{% trans "Пока нет новостей" %}.</p>
         </div>
         {% endfor %}
     </div>

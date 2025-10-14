@@ -1,6 +1,7 @@
 from Voka import models
 from django.db import models
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
 
 class Doctors(models.Model):
@@ -8,11 +9,11 @@ class Doctors(models.Model):
         NO = 0, "Не входит в руководство"
         YES = 1, "Входит в руководство"
 
-    name = models.CharField(verbose_name="Имя",max_length=255,db_index=True)
-    surname = models.CharField(verbose_name="Фамилия",max_length=255)
-    patronymic = models.CharField(verbose_name="Отчество",max_length=255)
-    job_title = models.CharField(verbose_name="Должность",max_length=255,null=True,blank=True)
-    experience = models.IntegerField(verbose_name="Стаж работы", default=0,)
+    name = models.CharField(verbose_name=_("Имя"),max_length=255,db_index=True)
+    surname = models.CharField(verbose_name=_("Фамилия"),max_length=255)
+    patronymic = models.CharField(verbose_name=_("Отчество"),max_length=255)
+    job_title = models.CharField(verbose_name=_("Должность"),max_length=255,null=True,blank=True)
+    experience = models.IntegerField(verbose_name=_("Стаж работы"), default=0,)
     slug = models.SlugField(max_length=255,unique=True,db_index=True)
     manager = models.IntegerField(verbose_name="Руководство", choices=Managers.choices, default=Managers.NO)
     image = models.ImageField(

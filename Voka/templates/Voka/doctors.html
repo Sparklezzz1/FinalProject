@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 {% block content %}
 
 <div class="container mt-5">
@@ -28,12 +29,12 @@
                     {% endif %}
 
                     <p class="fw-medium mb-1">
-                        <strong>Опыт работы:</strong> {{ item.experience }} лет
+                        <strong>{% trans "Опыт работы:" %}</strong> {{ item.experience }}{% trans "лет" %} 
                     </p>
 
                     {% if item.get_absolute_url %}
                         <a href="{{ item.get_absolute_url }}" class="btn btn-primary mt-2 w-100">
-                            Подробнее
+                            {% trans "Подробнее" %}
                         </a>
                     {% endif %}
                 </div>
@@ -41,7 +42,7 @@
         </div>
         {% empty %}
         <div class="col-12 text-center text-muted py-5">
-            Врачи пока не добавлены.
+            {% trans "Врачи пока не добавлены." %}
         </div>
         {% endfor %}
     </div>

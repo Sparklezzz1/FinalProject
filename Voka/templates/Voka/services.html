@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load voka_tags %}
 {% load static %}
+{% load i18n %}
 {% block content %}
 
 <h1 class="mb-4 text-center">{{ title }}</h1>
@@ -13,7 +14,7 @@
 
         <div class="card shadow-sm mb-3">
             <div class="card-header bg-primary text-white text-center">
-                Направления
+                {% trans "Направления" %}
             </div>
             <div class="card-body p-2">
                 {% show_directions %}
@@ -22,7 +23,7 @@
 
         <div class="card shadow-sm mb-3">
             <div class="card-header bg-success text-white text-center">
-                Врачи
+                {% trans "Врачи" %}
             </div>
             <div class="card-body p-2">
                 {% show_docs %}
@@ -31,15 +32,15 @@
 
         <div class="card shadow-sm mb-3">
             <div class="card-header bg-danger text-white text-center">
-                Скидки
+                {% trans "Скидки" %}
             </div>
             <div class="card-body d-flex flex-wrap justify-content-center gap-2">
                 <a href="{% url 'services' %}" class="btn btn-outline-secondary">
-                    Все услуги
+                    {% trans "Все услуги" %}
                 </a>
                 <a href="{% url 'services' %}?sale=1" 
                    class="btn btn-danger {% if sale_param == '1' %}active{% endif %}">
-                    Специальные предложения
+                    {% trans "Специальные предложения" %}
                 </a>
             </div>
         </div>
@@ -70,21 +71,21 @@
 
                         {% if item.sale_price %}
                             <p class="card-text text-danger text-center mb-1">
-                                <strong>Цена со скидкой:</strong> {{ item.final_price }} BYN
+                                <strong>{% trans "Цена со скидкой" %}:</strong> {{ item.final_price }} BYN
                             </p>
                             <p class="text-muted text-center text-decoration-line-through mb-2">{{ item.price }} BYN</p>
                         {% else %}
-                            <p class="card-text text-center mb-2"><strong>Стоимость:</strong> {{ item.price }} BYN</p>
+                            <p class="card-text text-center mb-2"><strong>{% trans "Стоимость" %}:</strong> {{ item.price }} BYN</p>
                         {% endif %}
 
                         {% if item.content %}
                             <p class="card-text text-muted small text-center">{{ item.content|truncatewords:10 }}</p>
                         {% endif %}
 
-                        <p class="card-text text-center"><strong>Направление:</strong> {{ item.direction }}</p>
+                        <p class="card-text text-center"><strong>{% trans "Направление" %}:</strong> {{ item.direction }}</p>
 
                         {% if item.doctors.exists %}
-                            <p class="fw-bold mb-1 text-center">Врачи:</p>
+                            <p class="fw-bold mb-1 text-center">{% trans "Врачи" %}:</p>
                             <ul class="list-group list-group-flush small mb-3">
                                 {% for doc in item.doctors.all %}
                                     <li class="list-group-item py-1 text-center">
@@ -97,23 +98,23 @@
                                 {% endfor %}
                             </ul>
                         {% else %}
-                            <p class="text-muted text-center">Врачи не назначены</p>
+                            <p class="text-muted text-center">{% trans "Врачи не назначены" %}</p>
                         {% endif %}
 
                         <div class="mt-auto d-flex flex-column gap-2">
                             {% if item.get_absolute_url %}
-                                <a href="{{ item.get_absolute_url }}" class="btn btn-primary w-100">Подробнее</a>
+                                <a href="{{ item.get_absolute_url }}" class="btn btn-primary w-100">{% trans "Подробнее" %}</a>
                             {% else %}
-                                <span class="btn btn-secondary w-100 disabled">Подробнее</span>
+                                <span class="btn btn-secondary w-100 disabled">{% trans "Подробнее" %}</span>
                             {% endif %}
 
                             {% if is_admin_group %}
-                                <a href="{% url 'service_edit' item.pk %}" class="btn btn-warning w-100 mt-2">Редактировать</a>
-                                <a href="{% url 'service_delete' item.pk %}" class="btn btn-danger w-100 mt-2">Удалить</a>
+                                <a href="{% url 'service_edit' item.pk %}" class="btn btn-warning w-100 mt-2">{% trans "Редактировать" %}</a>
+                                <a href="{% url 'service_delete' item.pk %}" class="btn btn-danger w-100 mt-2">{% trans "Удалить" %}</a>
                             
                             {% elif is_users_group %}
                             <a href="{% url 'appointment' %}" class="btn btn-success w-100 mt-2">
-                                Записаться на приём
+                                {% trans "Записаться на приём" %}
                             </a>
                             {% endif %}
                         </div>
@@ -125,7 +126,7 @@
             {% if is_admin_group %}
             <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex align-items-center justify-content-center">
                 <a href="{% url 'services_create' %}" class="btn btn-success w-100 shadow-sm py-2">
-                    Создать услугу
+                    {% trans "" %}Создать услугу
                 </a>
             </div>
             {% endif %}

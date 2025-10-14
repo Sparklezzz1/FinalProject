@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from .models.appointment import Appointment
 from .models.services import Services
 from django.forms.widgets import DateInput
+from django.utils.translation import gettext_lazy as _
 
 class AppointmentForm(forms.ModelForm):
     date = forms.DateField(
@@ -12,7 +13,7 @@ class AppointmentForm(forms.ModelForm):
                 'class': 'form-control',  
             }
         ),
-        label="Дата приема"
+        label=_("Дата приема")
     )
     time = forms.TimeField(
         widget=forms.TimeInput(
@@ -21,7 +22,7 @@ class AppointmentForm(forms.ModelForm):
                 'class': 'form-control'
             }
         ),
-        label="Время приёма"
+        label=_("Время приёма")
     )
     class Meta:
         model = Appointment

@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% block content %}
 <div class="container mt-5 mb-5">
     <div class="mx-auto" style="max-width: 400px;">
 
         <h2 class="text-center mb-4">
-                Запись на приём
+                {% trans "Запись на приём"%}
         </h2>
 
         <form method="post">
@@ -20,7 +21,7 @@
             {% endfor %}
 
             <button type="submit" class="btn btn-primary btn-sm w-100 mb-3">
-                Сохранить данные
+                {% trans "Сохранить данные" %}
             </button>
         </form>
 
