@@ -11,14 +11,13 @@ from .models.appointment import Appointment
 from .models.news import News
 from .forms import AppointmentForm, RegistrationForm, ServicesForm
 
-
-menu = [
-    {'title': _('Услуги'), 'url_name': 'services'},
-    {'title': _('Врачи'), 'url_name': 'doctors'},
-    {'title': _('Новости'), 'url_name': 'news'},
-    {'title': _('Запись на прием'), 'url_name': 'appointment'},
-]
-
+def get_menu():
+    return [
+        {'title': _('Услуги'), 'url_name': 'services'},
+        {'title': _('Врачи'), 'url_name': 'doctors'},
+        {'title': _('Новости'), 'url_name': 'news'},
+        {'title': _('Запись на прием'), 'url_name': 'appointment'},
+    ]
 
 
 def get_filtered_services(doc_slug=None, dir_slug=None, sale_param=None):
@@ -67,7 +66,7 @@ def main_page(request):
 
     return render(request, 'Voka/main_page.html', {
         'title': _('Главная страница'),
-        'menu': menu,
+        'menu': get_menu,
         'services': services,   
         'manager':manager,
         'SALEYES': Services.OnSale.SALEYES,
@@ -87,7 +86,7 @@ def services(request):
     services, selected_doc, selected_dir = get_filtered_services(doc_slug, dir_slug,sale_param)
     return render(request, 'Voka/services.html', {
         'title': _('Услуги'),
-        'menu': menu,
+        'menu': get_menu,
         'services': services,
         'selected_doc': selected_doc,
         'selected_dir': selected_dir,
@@ -103,7 +102,7 @@ def services_create(request):
             return redirect('services')
     else:
         form = ServicesForm()
-    return render(request, 'Voka/services_form.html', {'form': form,'title':"Создание услуги",'menu':menu,})
+    return render(request, 'Voka/services_form.html', {'form': form,'title':"Создание услуги",'menu':get_menu,})
 
 
 def service_delete(request, pk):
@@ -135,7 +134,7 @@ def show_serv(request, serv_slug):
     
     return render(request, 'Voka/serv.html', {
         'title': serv.title,
-        'menu': menu,
+        'menu': get_menu,
         'serv': serv,
     })
 
@@ -148,7 +147,7 @@ def filter_direction(request, direction_slug):
     )
     return render(request, 'Voka/main_page.html', {
         'title': f'Направление: {direction.name}',
-        'menu': menu,
+        'menu': get_menu,
         'services': services,
         'dir_selected': direction.pk,
     })
@@ -158,7 +157,7 @@ def doctors(request):
     doctors = Doctors.objects.all().order_by('-experience')
     return render(request, 'Voka/doctors.html', {
         'title': _('Врачи'),
-        'menu': menu,
+        'menu': get_menu,
         'doctors': doctors,
     })
 
@@ -167,7 +166,7 @@ def show_docs(request, doc_slug):
     doc = get_object_or_404(Doctors, slug=doc_slug)
     return render(request, 'Voka/doc.html', {
         'title': f'{doc.surname} {doc.name} {doc.patronymic}',
-        'menu': menu,
+        'menu': get_menu,
         'doc': doc,
     })
 
@@ -200,7 +199,7 @@ def appointment(request):
 
     return render(request, "Voka/appointment.html", {
         'title': "Запись на приём",
-        'menu': menu,
+        'menu': get_menu,
         'form': form,
     })
 
@@ -209,7 +208,7 @@ def news(request):
     news = News.objects.all()
     return render(request, 'Voka/news.html',{
         'title':"Новости",
-        "menu":menu,
+        "menu":get_menu,
         "news":news,
     })
 
@@ -217,7 +216,7 @@ def news_detail(request,news_slug):
     news = get_object_or_404(News, slug=news_slug)
     return render(request, 'Voka/news_detail.html',{
         'title':"Новости",
-        "menu":menu,
+        "menu":get_menu,
         "news":news,
     })
 
@@ -228,7 +227,7 @@ def profile(request):
     return render(request, 'Voka/profile.html', {
         'title': 'Профиль',
         'orders' : orders,
-        'menu': menu,
+        'menu': get_menu,
         'appointment': appointment,
     })
 

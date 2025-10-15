@@ -4,7 +4,7 @@
 {% load i18n %}
 
 {% block content %}
-<h1 class="mb-4 text-start">{% trans title %}</h1>
+<h1 class="mb-4 text-start">{{ title }}</h1>
 <div class="h3 mb-3 text-start">{% trans "Сейчас на скидке" %}</div>
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
   {% for s in sale_page_obj %}
