@@ -34,6 +34,7 @@ class DirectionAdmin(TranslationAdmin):
     prepopulated_fields = {"slug": ("name",)}
     search_fields = ['name']
 
+
 @admin.register(Order)
 class OrderAdmin(TranslationAdmin):
     list_display = ('id', 'user', 'service')

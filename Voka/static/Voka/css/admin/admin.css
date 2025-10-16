@@ -1,0 +1,84 @@
+
+:root {
+  --primary-color: #007bff;   
+  --primary-hover: #0056b3;
+  --delete-color: #dc3545;
+  --delete-hover: #b02a37;
+  --border-radius: 4px;
+}
+
+
+#header {
+  background-color: var(--primary-color);
+  color: #fff;
+  border-bottom: 2px solid var(--primary-hover);
+}
+
+#header a:link, #header a:visited {
+  color: #fff !important;
+}
+
+#header a:hover {
+  text-decoration: underline;
+}
+
+
+.button, 
+input[type="submit"], 
+.submit-row input, 
+a.button {
+  background-color: var(--primary-color);
+  border: 1px solid var(--primary-hover);
+  border-radius: var(--border-radius);
+  color: #fff;
+  transition: background-color 0.2s ease;
+}
+
+.button:hover, 
+input[type="submit"]:hover, 
+.submit-row input:hover, 
+a.button:hover {
+  background-color: var(--primary-hover);
+}
+
+
+.deletelink {
+  background-color: var(--delete-color);
+  border: 1px solid var(--delete-hover);
+  border-radius: var(--border-radius);
+  color: #fff !important;
+}
+
+.deletelink:hover {
+  background-color: var(--delete-hover);
+}
+
+
+.module caption, .inline-group h2 {
+  background: var(--primary-color);
+  color: #fff;
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
+}
+
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.15);
+  outline: none;
+}
+
+.messagelist li.success {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.messagelist li.error {
+  background-color: var(--delete-color);
+  color: #fff;
+}
+
+.messagelist li.warning {
+  background-color: #ffc107;
+  color: #000;
+}

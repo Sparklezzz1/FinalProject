@@ -8,7 +8,7 @@ class Doctors(models.Model):
     class Managers(models.IntegerChoices):
         NO = 0, "Не входит в руководство"
         YES = 1, "Входит в руководство"
-
+    
     name = models.CharField(verbose_name=_("Имя"),max_length=255,db_index=True)
     surname = models.CharField(verbose_name=_("Фамилия"),max_length=255)
     patronymic = models.CharField(verbose_name=_("Отчество"),max_length=255)
