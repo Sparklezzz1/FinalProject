@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-14 21:51+0300\n"
-"PO-Revision-Date: 2025-10-14 21:51+0300\n"
+"POT-Creation-Date: 2025-10-17 23:24+0300\n"
+"PO-Revision-Date: 2025-10-17 23:26+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en\n"
@@ -27,38 +27,79 @@ msgstr "Russian"
 msgid "English"
 msgstr "English"
 
-#: .\Voka\models\appointment.py:13
-msgid "Имя пациента"
-msgstr "Patient's name"
-
-#: .\Voka\models\appointment.py:14
-msgid "Фамилия пациента"
-msgstr "Patient's last name"
-
-#: .\Voka\models\appointment.py:15 .\Voka\models\services.py:17
-#: .\Voka\models\services.py:70
-msgid "Услуга"
-msgstr "Service"
-
-#: .\Voka\models\appointment.py:17
+#: .\Voka\forms.py:17
 msgid "Дата приема"
 msgstr "Date of admission"
 
-#: .\Voka\models\appointment.py:18
+#: .\Voka\forms.py:26 .\Voka\models\appointment.py:35
 msgid "Время приёма"
 msgstr "Reception time"
 
-#: .\Voka\models\appointment.py:19
+#: .\Voka\models\appointment.py:8
+msgid "Новая"
+msgstr "New"
+
+#: .\Voka\models\appointment.py:9
+msgid "Подтверждена"
+msgstr "Confirmed"
+
+#: .\Voka\models\appointment.py:10
+msgid "Отменена"
+msgstr "Cancelled"
+
+#: .\Voka\models\appointment.py:11
+msgid "Завершена"
+msgstr "Completed"
+
+#: .\Voka\models\appointment.py:15 .\Voka\templates\Voka\profile.html:23
+#: .\Voka\templates\Voka\profile.html:54
+msgid "Пользователь"
+msgstr "User"
+
+#: .\Voka\models\appointment.py:20 .\Voka\templates\Voka\appointment.html:22
+msgid "Врач"
+msgstr "Doctor"
+
+#: .\Voka\models\appointment.py:26 .\Voka\models\services.py:18
+#: .\Voka\templates\Voka\appointment.html:16
+msgid "Услуга"
+msgstr "Service"
+
+#: .\Voka\models\appointment.py:31
+msgid "Имя пациента"
+msgstr "Patient's name"
+
+#: .\Voka\models\appointment.py:32
+msgid "Фамилия пациента"
+msgstr "Patient's last name"
+
+#: .\Voka\models\appointment.py:34
+msgid "Дата приёма"
+msgstr "Date of admission"
+
+#: .\Voka\models\appointment.py:37
 msgid "Причина визита"
 msgstr "Reason for the visit"
 
-#: .\Voka\models\appointment.py:21
+#: .\Voka\models\appointment.py:39
 msgid "Номер телефона"
 msgstr "Phone number"
 
-#: .\Voka\models\appointment.py:25
+#: .\Voka\models\appointment.py:43
 msgid "Введите корректный номер телефона"
 msgstr "Please enter a valid phone number"
+
+#: .\Voka\models\appointment.py:49
+msgid "Статус"
+msgstr "Status"
+
+#: .\Voka\models\appointment.py:56
+msgid "Форма записи на приём"
+msgstr "Make an appointment"
+
+#: .\Voka\models\appointment.py:57
+msgid "Формы записи на приём"
+msgstr "Make an appointments"
 
 #: .\Voka\models\doctors.py:12
 msgid "Имя"
@@ -92,56 +133,73 @@ msgstr "Date of admission"
 msgid "Контент новости"
 msgstr "News title"
 
-#: .\Voka\models\services.py:19
+#: .\Voka\models\services.py:20
 msgid "Описание"
 msgstr "Description"
 
-#: .\Voka\models\services.py:20 .\Voka\templates\Voka\main_page.html:28
+#: .\Voka\models\services.py:21 .\Voka\templates\Voka\main_page.html:28
 #: .\Voka\templates\Voka\services.html:78
 msgid "Стоимость"
 msgstr "Price"
 
-#: .\Voka\models\services.py:21 .\Voka\models\services.py:25
+#: .\Voka\models\services.py:22 .\Voka\models\services.py:26
 msgid "Время создания"
 msgstr "Reception time"
 
-#: .\Voka\models\services.py:22
+#: .\Voka\models\services.py:23
 msgid "Время изменения"
 msgstr "Time of change"
 
-#: .\Voka\models\services.py:23
+#: .\Voka\models\services.py:24
 msgid "Доступность услуги"
 msgstr "Service availability"
 
-#: .\Voka\models\services.py:24 .\Voka\templates\Voka\main_page.html:31
+#: .\Voka\models\services.py:25 .\Voka\templates\Voka\main_page.html:31
 #: .\Voka\templates\Voka\services.html:85
 msgid "Направление"
 msgstr "Direction"
 
-#: .\Voka\models\services.py:26
+#: .\Voka\models\services.py:27
 msgid "На акции"
 msgstr "At the stock"
 
-#: .\Voka\models\services.py:27
+#: .\Voka\models\services.py:28
 msgid "Размер скидки"
 msgstr "Discount amount"
-
-#: .\Voka\models\services.py:69 .\Voka\templates\Voka\profile.html:23
-#: .\Voka\templates\Voka\profile.html:51
-msgid "Пользователь"
-msgstr "User"
 
 #: .\Voka\templates\Voka\appointment.html:8
 msgid "Запись на приём"
 msgstr "Make an appointment"
 
 #: .\Voka\templates\Voka\appointment.html:24
+#: .\Voka\templates\Voka\appointment.html:60
+msgid "Сначала выберите услугу"
+msgstr "First, select a service"
+
+#: .\Voka\templates\Voka\appointment.html:42
 msgid "Сохранить данные"
 msgstr "Save data"
+
+#: .\Voka\templates\Voka\appointment.html:56
+msgid "Загрузка..."
+msgstr "Loading..."
+
+#: .\Voka\templates\Voka\appointment.html:69
+msgid "Нет доступных врачей"
+msgstr "There are no doctors available"
+
+#: .\Voka\templates\Voka\appointment.html:81
+msgid "Ошибка загрузки"
+msgstr "Loading error"
 
 #: .\Voka\templates\Voka\doc.html:31
 msgid "Стаж"
 msgstr "Experience"
+
+#: .\Voka\templates\Voka\doc.html:31 .\Voka\templates\Voka\doctors.html:32
+#: .\Voka\templates\Voka\main_page.html:103
+msgid "лет"
+msgstr "years"
 
 #: .\Voka\templates\Voka\doc.html:45
 msgid "Услуги врача"
@@ -154,11 +212,6 @@ msgstr "This doctor has no scheduled services yet"
 #: .\Voka\templates\Voka\doctors.html:32
 msgid "Опыт работы:"
 msgstr "Work experience:"
-
-#: .\Voka\templates\Voka\doctors.html:32
-#: .\Voka\templates\Voka\main_page.html:103
-msgid "лет"
-msgstr "years"
 
 #: .\Voka\templates\Voka\doctors.html:37
 #: .\Voka\templates\Voka\main_page.html:47
@@ -285,7 +338,7 @@ msgstr ""
 "are available"
 
 #: .\Voka\templates\Voka\main_page.html:207 .\Voka\templates\Voka\news.html:7
-#: .\Voka\views.py:18
+#: .\Voka\views.py:19
 msgid "Новости"
 msgstr "News"
 
@@ -303,7 +356,7 @@ msgstr "Published"
 
 #: .\Voka\templates\Voka\news_detail.html:28
 msgid " ← Вернуться к новостям"
-msgstr "← Back to news"
+msgstr " ← Back to news"
 
 #: .\Voka\templates\Voka\page_not_found.html:12
 msgid "Страница не найдена"
@@ -325,20 +378,24 @@ msgstr "Welcome to the website,"
 msgid "Выбранные услуги"
 msgstr "Selected services"
 
-#: .\Voka\templates\Voka\profile.html:29 .\Voka\templates\Voka\profile.html:57
+#: .\Voka\templates\Voka\profile.html:26
+msgid "Врач оказывающий услугу"
+msgstr "Doctors providing the service"
+
+#: .\Voka\templates\Voka\profile.html:32 .\Voka\templates\Voka\profile.html:60
 #: .\Voka\templates\Voka\services.html:113
 msgid "Удалить"
 msgstr "Delete"
 
-#: .\Voka\templates\Voka\profile.html:38
+#: .\Voka\templates\Voka\profile.html:41
 msgid "У вас пока нет выбранных услуг."
 msgstr "You don't have any services selected yet."
 
-#: .\Voka\templates\Voka\profile.html:66
+#: .\Voka\templates\Voka\profile.html:69
 msgid "К вам пока нет записи"
 msgstr "There is no appointment for you yet"
 
-#: .\Voka\templates\Voka\profile.html:83
+#: .\Voka\templates\Voka\profile.html:86
 msgid "Выйти"
 msgstr "Exit"
 
@@ -367,8 +424,8 @@ msgid "Направления"
 msgstr "Directions"
 
 #: .\Voka\templates\Voka\services.html:26
-#: .\Voka\templates\Voka\services.html:88 .\Voka\views.py:17
-#: .\Voka\views.py:160
+#: .\Voka\templates\Voka\services.html:88 .\Voka\views.py:18
+#: .\Voka\views.py:173
 msgid "Врачи"
 msgstr "Doctors"
 
@@ -388,17 +445,25 @@ msgstr "Special offers"
 msgid "Редактировать"
 msgstr "Edit"
 
-#: .\Voka\views.py:16 .\Voka\views.py:89 .\templates\base.html:135
+#: .\Voka\views.py:17 .\Voka\views.py:102 .\templates\base.html:135
 msgid "Услуги"
 msgstr "Services"
 
-#: .\Voka\views.py:19
+#: .\Voka\views.py:20
 msgid "Запись на прием"
 msgstr "Make an appointment"
 
-#: .\Voka\views.py:69
+#: .\Voka\views.py:82
 msgid "Главная страница"
 msgstr "Home page"
+
+#: .\templates\admin\base_site.html:3
+msgid "Django site admin"
+msgstr ""
+
+#: .\templates\admin\base_site.html:6
+msgid "Django administration"
+msgstr ""
 
 #: .\templates\base.html:66
 msgid "Войти"

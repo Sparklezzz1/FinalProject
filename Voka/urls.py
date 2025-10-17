@@ -15,10 +15,11 @@ urlpatterns = [
     path('appointment/', views.appointment, name='appointment'),
     path('services_form/', views.services_create, name = "services_create"),
     path('services/<int:pk>/delete/', views.service_delete, name='service_delete'),
-    path('order/<int:pk>/delete/', views.order_delete, name='order_delete'),
+    path('appointment/<int:pk>/delete/', views.appointment_delete, name='appointment_delete'),
     path('services/<int:service_id>/edit/', views.service_edit, name='service_edit'),
     path('registration/', views.Registration.as_view(), name = "registration"),
     path('profile/', views.profile, name = 'profile'),
     path('toggle-theme/', views.toggle_theme, name='toggle_theme'),
     path('i18n/', include('django.conf.urls.i18n')),
+    path('get-doctors/', views.get_doctors_by_service, name='get_doctors_by_service'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

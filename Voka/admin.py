@@ -1,6 +1,6 @@
 import Voka.translation  
 from django.contrib import admin, messages
-from .models.services import Services, Direction, Order
+from .models.services import Services, Direction
 from .models.doctors import Doctors
 from .models.appointment import Appointment
 from .models.news import News
@@ -34,11 +34,6 @@ class DirectionAdmin(TranslationAdmin):
     prepopulated_fields = {"slug": ("name",)}
     search_fields = ['name']
 
-
-@admin.register(Order)
-class OrderAdmin(TranslationAdmin):
-    list_display = ('id', 'user', 'service')
-    search_fields = ['user', 'service']
 
 @admin.register(Doctors)
 class DoctorsAdmin(TranslationAdmin):

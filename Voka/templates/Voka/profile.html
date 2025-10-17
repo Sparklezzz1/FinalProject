@@ -12,19 +12,22 @@
    {% if is_user_group %}
     <h3 class="mb-3">{% trans "Выбранные услуги" %}</h3>
 
-    {% if orders %}
+    {% if appointment_user %}
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-            {% for order in orders %}
+            {% for appointment in appointment_user %}
                 <div class="col">
                     <div class="card h-100 shadow-sm">
                         <div class="card-body">
-                            <h5 class="card-title">{{ order.service.title }}</h5>
+                            <h5 class="card-title">{{ appointment.services.title }}</h5>
+                            <p class="card-text">                          
+                                {% trans "Пользователь" %} : {{ appointment.user.username }}                             
+                            </p>
                             <p class="card-text">
-                               {% trans "Пользователь" %} : {{ order.user.username }}
+                                {% trans "Врач оказывающий услугу" %} : {{ appointment.doctor.name }}
                             </p>
                         </div>
                         <div class="card-footer text-end">
-                            <form method="post" action="{% url 'order_delete' order.id %}">
+                            <form method="post" action="{% url 'appointment_delete' appointment.id %}">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-sm btn-danger">{% trans "Удалить" %}</button>
                             </form>

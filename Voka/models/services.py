@@ -4,6 +4,7 @@ from django.utils.text import slugify
 from slugify import slugify
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
+from .appointment import Appointment
 
 class Services(models.Model):
     class Status(models.IntegerChoices):
@@ -65,17 +66,5 @@ class Direction(models.Model):
     class Meta:
         verbose_name = "Направление"
         verbose_name_plural = "Направления"
-    
-class Order(models.Model):
-    user = models.ForeignKey(User, verbose_name=_("Пользователь"), on_delete=models.PROTECT)
-    service = models.ForeignKey(Services, verbose_name=_("Услуга"), on_delete=models.PROTECT)
-
-    def __str__(self):
-        return f"{self.user.username} - {self.service.title}"
-    
-    class Meta:
-        verbose_name = "Запись на прием"
-        verbose_name_plural = "Записи на прием"
-
     
 

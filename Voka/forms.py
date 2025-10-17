@@ -4,8 +4,9 @@ from .models.appointment import Appointment
 from .models.services import Services
 from django.forms.widgets import DateInput
 from django.utils.translation import gettext_lazy as _
+from modeltranslation.forms import TranslationModelForm
 
-class AppointmentForm(forms.ModelForm):
+class AppointmentForm(TranslationModelForm):
     date = forms.DateField(
         widget=DateInput(
             attrs={
@@ -26,7 +27,7 @@ class AppointmentForm(forms.ModelForm):
     )
     class Meta:
         model = Appointment
-        exclude = ("status",)
+        fields = ['doctor','patient_name', 'patient_surname', 'services', 'date', 'time','reason','phone']
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

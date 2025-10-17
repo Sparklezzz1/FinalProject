@@ -1,37 +1,60 @@
-from Voka import models
 from django.db import models
 from django.core.validators import RegexValidator
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.models import User
 
 class Appointment(models.Model):
     STATUS_CHOICES = [
-        ('new', 'Новая'),
-        ('confirmed', 'Подтверждена'),
-        ('canceled', 'Отменена'),
-        ('done', 'Завершена'),
+        ('new', _('Новая')),
+        ('confirmed', _('Подтверждена')),
+        ('canceled', _('Отменена')),
+        ('done', _('Завершена')),
     ]
-    patient_name = models.CharField(verbose_name=_("Имя пациента"), max_length=255, db_index=True)
-    patient_surname = models.CharField(verbose_name=_("Фамилия пациента"), max_length=255, db_index=True)
-    services = models.ForeignKey("Voka.Services",verbose_name=_("Услуга"),   null=True, 
-        blank=True,on_delete=models.CASCADE,related_name="services_appointments")
-    date = models.DateField(verbose_name=_("Дата приема"), db_index=True)
-    time = models.TimeField(verbose_name=_("Время приёма"), db_index=True)
-    reason = models.TextField(verbose_name=_("Причина визита"), blank=True, null=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='new')
-    phone = models.CharField(verbose_name=_("Номер телефона"),max_length=13,
+
+    user = models.ForeignKey(
+        User, verbose_name=_("Пользователь"), 
+        on_delete=models.SET_NULL, null=True, blank=True
+    )
+
+    doctor = models.ForeignKey(
+        'Voka.Doctors', verbose_name=_("Врач"),
+        on_delete=models.SET_NULL, null=True, blank=True,
+        related_name='appointments'
+    )
+
+    services = models.ForeignKey(
+        'Voka.Services', verbose_name=_("Услуга"),
+        on_delete=models.SET_NULL, null=True, blank=True,
+        related_name='appointments'
+    )
+
+    patient_name = models.CharField(_("Имя пациента"), max_length=255, db_index=True)
+    patient_surname = models.CharField(_("Фамилия пациента"), max_length=255, db_index=True)
+
+    date = models.DateField(_("Дата приёма"), db_index=True)
+    time = models.TimeField(_("Время приёма"), db_index=True)
+
+    reason = models.TextField(_("Причина визита"), blank=True, null=True)
+    phone = models.CharField(
+        _("Номер телефона"), max_length=13,
         validators=[
             RegexValidator(
                 regex=r'^\+375(?:25|29|33|44|17)\d{7}$',
                 message=_("Введите корректный номер телефона")
             )
-        ],
+        ]
+    )
+
+    status = models.CharField(
+        _("Статус"), max_length=20,
+        choices=STATUS_CHOICES, default='new'
     )
 
     class Meta:
-        unique_together = ('services', 'date', 'time')
+        unique_together = ('doctor', 'date', 'time')
         ordering = ['-date', '-time']
-        verbose_name = "Форма записи на прием"
-        verbose_name_plural = "Формы записи на прием"
+        verbose_name = _("Форма записи на приём")
+        verbose_name_plural = _("Формы записи на приём")
 
     def __str__(self):
-        return f"{self.patient_surname} {self.patient_name} : {self.services} ({self.date} {self.time})"
+        return f"{self.patient_surname} {self.patient_name} — {self.services} ({self.date} {self.time})"

@@ -5,11 +5,12 @@ from django.views.generic.edit import FormView
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _ 
-from .models.services import Services, Direction, Order
+from .models.services import Services, Direction
 from .models.doctors import Doctors
 from .models.appointment import Appointment
 from .models.news import News
 from .forms import AppointmentForm, RegistrationForm, ServicesForm
+from django.http import JsonResponse
 
 def get_menu():
     return [
@@ -19,6 +20,19 @@ def get_menu():
         {'title': _('Запись на прием'), 'url_name': 'appointment'},
     ]
 
+def get_doctors_by_service(request):
+    service_id = request.GET.get('service_id')
+    if not service_id:
+        return JsonResponse({'error': 'no service_id'}, status=400)
+
+    try:
+        service = Services.objects.get(id=service_id)
+    except Services.DoesNotExist:
+        return JsonResponse({'error': 'service not found'}, status=404)
+
+    doctors = service.doctors.all().values('id', 'name', 'surname')
+    data = [{'id': d['id'], 'full_name': f"{d['surname']} {d['name']}"} for d in doctors]
+    return JsonResponse(data, safe=False)
 
 def get_filtered_services(doc_slug=None, dir_slug=None, sale_param=None):
     services = Services.objects.filter(availability=Services.Status.PUBLISHED)
@@ -171,10 +185,10 @@ def show_docs(request, doc_slug):
     })
 
 @login_required
-def order_delete(request, pk):
-    order = get_object_or_404(Order, pk=pk, user=request.user)
+def appointment_delete(request, pk):
+    appointment = get_object_or_404(Appointment, pk=pk, user=request.user)
     if request.method == "POST":
-        order.delete() 
+        appointment.delete() 
         return redirect("profile")  
 
 
@@ -186,11 +200,9 @@ def appointment(request):
         if form.is_valid():
             appointment = form.save(commit=False)
             appointment.user = request.user
-            appointment.save()
+            appointment.save()  # Сохраняем запись один раз
 
             service = appointment.services
-
-            Order.objects.get_or_create(user=request.user, service=service)
 
             messages.success(request, f'Вы успешно записались на услугу "{service.title}"!')
             return redirect('profile')
@@ -222,13 +234,13 @@ def news_detail(request,news_slug):
 
 @login_required
 def profile(request):
-    appointment = Appointment.objects.all()
-    orders = Order.objects.filter(user=request.user)
+    appointment_admin = Appointment.objects.all()
+    appointment_user = Appointment.objects.filter(user=request.user)
     return render(request, 'Voka/profile.html', {
         'title': 'Профиль',
-        'orders' : orders,
+        'appointment_user' : appointment_user,
         'menu': get_menu,
-        'appointment': appointment,
+        'appointment_admin': appointment_admin,
     })
 
 class Registration(FormView):
