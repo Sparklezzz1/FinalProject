@@ -74,6 +74,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'Voka.context_processors.user_group',
+                'Voka.context_processors.admin_group',
+                'Voka.context_processors.doctor_group',
             ],
         },
     },

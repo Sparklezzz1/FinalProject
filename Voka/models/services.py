@@ -1,10 +1,9 @@
+from Voka import models
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
-from slugify import slugify
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
-from .appointment import Appointment
 
 class Services(models.Model):
     class Status(models.IntegerChoices):
@@ -15,7 +14,7 @@ class Services(models.Model):
         SALENO = 0, "Скидки нет"
         SALEYES = 1, "Скидка"
 
-    title = models.CharField(verbose_name=_("Услуга"), max_length=255)
+    title = models.CharField(verbose_name="Услуга", max_length=255)
     slug = models.SlugField(max_length=255, unique=True, db_index=True)
     content = models.TextField(verbose_name=_("Описание"),blank=True)
     price = models.FloatField(verbose_name=_("Стоимость"),null=True, blank=True)

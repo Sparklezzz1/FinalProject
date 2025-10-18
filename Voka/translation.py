@@ -22,4 +22,4 @@ class NewsTranslationOptions(TranslationOptions):
 
 @register(Appointment)
 class AppointmentTranslationOptions(TranslationOptions):
-    fields = ('patient_name','patient_surname', 'reason','doctor')
+    fields = ('patient_name','patient_surname', 'reason')

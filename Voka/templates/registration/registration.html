@@ -1,14 +1,15 @@
 {% extends 'base.html' %}
 {% load widget_tweaks %}
+{% load i18n %}
 
 {% block content %}
 <div class="container mt-5 d-flex justify-content-center">
   <div class="card shadow-lg p-4" style="max-width: 500px; width: 100%;">
-    <h3 class="text-center mb-4">Регистрация аккаунта</h3>
+    <h3 class="text-center mb-4">{% trans 'Регистрация аккаунта' %}</h3>
 
     {% if form.errors %}
       <div class="alert alert-danger" role="alert">
-        Пожалуйста, исправьте ошибки в форме и попробуйте снова.
+       {% trans 'Пожалуйста, исправьте ошибки в форме и попробуйте снова.' %} 
       </div>
     {% endif %}
 
@@ -28,12 +29,12 @@
       {% endfor %}
 
       <div class="d-grid gap-2 mb-3">
-        <button type="submit" class="btn btn-success btn-lg">Создать аккаунт</button>
+        <button type="submit" class="btn btn-success btn-lg">{% trans 'Создать аккаунт' %}</button>
       </div>
 
       <div class="text-center">
-        <small class="text-muted">Уже есть аккаунт?</small>
-        <a href="{% url 'login' %}" class="link-primary ms-1">Войти</a>
+        <small class="text-muted">{% trans 'Уже есть аккаунт?' %}</small>
+        <a href="{% url 'login' %}" class="link-primary ms-1">{% trans 'Войти' %}</a>
       </div>
     </form>
   </div>

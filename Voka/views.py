@@ -11,6 +11,8 @@ from .models.appointment import Appointment
 from .models.news import News
 from .forms import AppointmentForm, RegistrationForm, ServicesForm
 from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.utils import translation
 
 def get_menu():
     return [
@@ -19,20 +21,6 @@ def get_menu():
         {'title': _('Новости'), 'url_name': 'news'},
         {'title': _('Запись на прием'), 'url_name': 'appointment'},
     ]
-
-def get_doctors_by_service(request):
-    service_id = request.GET.get('service_id')
-    if not service_id:
-        return JsonResponse({'error': 'no service_id'}, status=400)
-
-    try:
-        service = Services.objects.get(id=service_id)
-    except Services.DoesNotExist:
-        return JsonResponse({'error': 'service not found'}, status=404)
-
-    doctors = service.doctors.all().values('id', 'name', 'surname')
-    data = [{'id': d['id'], 'full_name': f"{d['surname']} {d['name']}"} for d in doctors]
-    return JsonResponse(data, safe=False)
 
 def get_filtered_services(doc_slug=None, dir_slug=None, sale_param=None):
     services = Services.objects.filter(availability=Services.Status.PUBLISHED)
@@ -153,20 +141,6 @@ def show_serv(request, serv_slug):
     })
 
 
-def filter_direction(request, direction_slug):
-    direction = get_object_or_404(Direction, slug=direction_slug)
-    services = Services.objects.filter(
-        availability=Services.Status.PUBLISHED,
-        direction=direction
-    )
-    return render(request, 'Voka/main_page.html', {
-        'title': f'Направление: {direction.name}',
-        'menu': get_menu,
-        'services': services,
-        'dir_selected': direction.pk,
-    })
-
-
 def doctors(request):
     doctors = Doctors.objects.all().order_by('-experience')
     return render(request, 'Voka/doctors.html', {
@@ -192,7 +166,6 @@ def appointment_delete(request, pk):
         return redirect("profile")  
 
 
-
 @login_required
 def appointment(request):
     if request.method == 'POST':
@@ -200,20 +173,47 @@ def appointment(request):
         if form.is_valid():
             appointment = form.save(commit=False)
             appointment.user = request.user
-            appointment.save()  # Сохраняем запись один раз
+            appointment.save()
 
             service = appointment.services
+            doctor = appointment.doctor
 
-            messages.success(request, f'Вы успешно записались на услугу "{service.title}"!')
+            if hasattr(request.user, 'profile'):
+                request.user.profile.appointments.add(appointment)
+
+            if hasattr(doctor, 'profile'):
+                doctor.profile.appointments.add(appointment)
+
+            messages.success(
+                request, 
+                f'Вы успешно записались на услугу "{service.title}" у врача "{doctor}"!'
+            )
             return redirect('profile')
     else:
         form = AppointmentForm()
 
     return render(request, "Voka/appointment.html", {
-        'title': "Запись на приём",
+        'title': _("Запись на приём"),
         'menu': get_menu,
         'form': form,
     })
+
+@login_required
+@require_POST
+def appointment_update_status(request, pk):
+    if not request.user.groups.filter(name='Doctors').exists():
+        return redirect('profile')
+
+    appointment = get_object_or_404(Appointment, pk=pk)
+    doctor = getattr(appointment, 'doctor', None)
+
+    if doctor and doctor.user == request.user:
+        new_status = request.POST.get('status')
+        if new_status in dict(Appointment.STATUS_CHOICES):
+            appointment.status = new_status
+            appointment.save()
+            messages.success(request, _("Статус приёма обновлён"))
+    return redirect('profile')
 
 
 def news(request):
@@ -236,11 +236,17 @@ def news_detail(request,news_slug):
 def profile(request):
     appointment_admin = Appointment.objects.all()
     appointment_user = Appointment.objects.filter(user=request.user)
+    appointment_doctor = None
+
+    if request.user.groups.filter(name='Doctors').exists():
+        appointment_doctor = Appointment.objects.filter(doctor__user_id=request.user.id)
+
     return render(request, 'Voka/profile.html', {
         'title': 'Профиль',
-        'appointment_user' : appointment_user,
-        'menu': get_menu,
+        'appointment_user': appointment_user,
         'appointment_admin': appointment_admin,
+        'appointment_doctor': appointment_doctor,
+        'menu': get_menu,
     })
 
 class Registration(FormView):

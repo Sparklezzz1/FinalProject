@@ -19,11 +19,17 @@
                     <div class="card h-100 shadow-sm">
                         <div class="card-body">
                             <h5 class="card-title">{{ appointment.services.title }}</h5>
-                            <p class="card-text">                          
-                                {% trans "Пользователь" %} : {{ appointment.user.username }}                             
+                            <p class="card-text">
+                                {% trans "Врач оказывающий услугу" %} : {{ appointment.doctor.name }} {{ appointment.doctor.surname }}
                             </p>
                             <p class="card-text">
-                                {% trans "Врач оказывающий услугу" %} : {{ appointment.doctor.name }}
+                                {% trans "Дата Приема" %} : {{ appointment.date }} 
+                            </p>
+                            <p class="card-text">
+                                {% trans "Время приема" %} : {{ appointment.time|time:"H:i" }}
+                            </p>
+                            <p class="card-text">
+                                {% trans "Статус" %} : {{ appointment.get_status_display }}
                             </p>
                         </div>
                         <div class="card-footer text-end">
@@ -43,21 +49,44 @@
     {% endif %}
 
 {% elif is_doctor_group %}
- {% if orders %}
+    {% if appointment_doctor.exists %}
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-            {% for order in orders %}
+            {% for appointment in appointment_doctor %}
                 <div class="col">
                     <div class="card h-100 shadow-sm">
                         <div class="card-body">
-                            <h5 class="card-title">{{ order.service.title }}</h5>
+
+                            <h5 class="card-title">{{ appointment.services.title }}</h5>
+
+
                             <p class="card-text">
-                                {% trans "Пользователь" %}: {{ order.user.username }}
+                                {% trans "Пользователь" %}: {{ appointment.patient_name }}
                             </p>
-                        </div>
-                        <div class="card-footer text-end">
-                            <form method="post" action="{% url 'order_delete' order.id %}">
+                            <p class="card-text">
+                                {% trans "Причина визита" %}: {{ appointment.reason }}
+                            </p>
+                            <p class="card-text">
+                                {% trans "Дата" %}: {{ appointment.date }} {{ appointment.time }}
+                            </p>
+
+                            <p class="card-text">
+                                {% trans "Статус" %}: {{ appointment.get_status_display }}
+                            </p>
+
+                            <form method="post" action="{% url 'appointment_update_status' appointment.id %}">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-sm btn-danger">{% trans "Удалить" %}</button>
+                                <div class="mb-2">
+                                    <select name="status" class="form-select form-select-sm">
+                                        {% for key, value in appointment.STATUS_CHOICES %}
+                                            <option value="{{ key }}" {% if appointment.status == key %}selected{% endif %}>
+                                                {{ value }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-sm btn-primary w-100">
+                                    {% trans "Обновить" %}
+                                </button>
                             </form>
                         </div>
                     </div>
@@ -72,9 +101,7 @@
 
 {% elif is_admin_group %}
     <div>
-        {% for a in appointment %}
-            <p>{{ a.patient_name }}</p>
-        {% endfor %}
+
     </div>
 
 {% endif %}

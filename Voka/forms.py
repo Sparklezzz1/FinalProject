@@ -1,44 +1,62 @@
 from django import forms
-from django.contrib.auth.models import User 
+from django.contrib.auth.models import User
+
+from Voka.models.doctors import Doctors 
 from .models.appointment import Appointment
 from .models.services import Services
-from django.forms.widgets import DateInput
 from django.utils.translation import gettext_lazy as _
-from modeltranslation.forms import TranslationModelForm
+from django.utils import timezone
+from datetime import time as dt_time, datetime
 
-class AppointmentForm(TranslationModelForm):
+class AppointmentForm(forms.ModelForm):
     date = forms.DateField(
-        widget=DateInput(
-            attrs={
-                'type': 'date',
-                'class': 'form-control',  
-            }
-        ),
-        label=_("Дата приема")
+        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+        label=_("Дата приёма")
     )
+
+    TIME_CHOICES = [(f"{h:02}:00", f"{h}:00") for h in range(10, 19)]
     time = forms.TimeField(
-        widget=forms.TimeInput(
-            attrs={
-                'type': 'time', 
-                'class': 'form-control'
-            }
-        ),
+        widget=forms.Select(choices=TIME_CHOICES, attrs={'class': 'form-control'}),
         label=_("Время приёма")
     )
+
     class Meta:
         model = Appointment
-        fields = ['doctor','patient_name', 'patient_surname', 'services', 'date', 'time','reason','phone']
-    
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for field in self.fields.values():
-            field.widget.attrs['class'] = 'form-control'
+        fields = ['doctor', 'patient_name', 'patient_surname', 'services', 'date', 'time', 'reason', 'phone']
+        widgets = {
+            'doctor': forms.Select(attrs={'class': 'form-select'}),
+            'services': forms.Select(attrs={'class': 'form-select'}),
+            'patient_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'patient_surname': forms.TextInput(attrs={'class': 'form-control'}),
+            'reason': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'phone': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+    def clean_date(self):
+        date = self.cleaned_data.get('date')
+        today = timezone.localdate()
+
+        if date < today:
+            self.add_error('date', _("Нельзя выбрать прошедшую дату."))
+        elif date.weekday() in (5, 6):
+            self.add_error('date', _("Нельзя записаться на выходные."))
+
+        return date
+
+
 
 class ServicesForm(forms.ModelForm):
+    doctors = forms.ModelMultipleChoiceField(
+        queryset=Doctors.objects.all(),
+        widget=forms.SelectMultiple(attrs={'class': 'form-select'}),
+        required=True,
+        label=_("Врачи")
+    )
+
     class Meta:
         model = Services
-        fields = '__all__'
-        exclude = ("slug",)
+        fields = ['title', 'content', 'price', 'direction', 'doctors', 'on_sale', 'sale_price', 'image', 'availability']
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
@@ -46,8 +64,8 @@ class ServicesForm(forms.ModelForm):
 
 class RegistrationForm(forms.Form):
     username = forms.CharField()
-    password = forms.CharField()
-    repeat_password = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput)
+    repeat_password = forms.CharField(widget=forms.PasswordInput)
 
     def save(self):
         same_name_users = User.objects.filter(username=self.cleaned_data["username"]).exists()

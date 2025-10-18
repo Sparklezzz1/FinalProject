@@ -1,25 +1,26 @@
 {% extends 'base.html' %}
 {% load widget_tweaks %}
+{% load i18n %}
 
 {% block content %}
 <div class="container mt-5 d-flex justify-content-center">
   <div class="card shadow-lg p-4" style="max-width: 420px; width: 100%;">
-    <h3 class="text-center mb-4">Вход в аккаунт</h3>
+    <h3 class="text-center mb-4">{% trans 'Вход в аккаунт' %}</h3>
 
     {% if form.errors %}
       <div class="alert alert-danger" role="alert">
-        Неверное имя пользователя или пароль. Попробуйте ещё раз.
+        {% trans 'Неверное имя пользователя или пароль. Попробуйте ещё раз.' %}
       </div>
     {% endif %}
 
     {% if next %}
       {% if user.is_authenticated %}
         <div class="alert alert-warning" role="alert">
-          У вас нет доступа к этой странице. Войдите в аккаунт с соответствующими правами.
+          {% trans 'У вас нет доступа к этой странице. Войдите в аккаунт с соответствующими правами.' %}
         </div>
       {% else %}
         <div class="alert alert-info" role="alert">
-          Пожалуйста, войдите в аккаунт, чтобы продолжить.
+          {% trans 'Пожалуйста, войдите в аккаунт, чтобы продолжить.' %}
         </div>
       {% endif %}
     {% endif %}
@@ -40,12 +41,12 @@
       <input type="hidden" name="next" value="{{ next }}">
 
       <div class="d-grid gap-2 mb-3">
-        <button type="submit" class="btn btn-primary btn-lg">Войти</button>
+        <button type="submit" class="btn btn-primary btn-lg">{% trans 'Войти'%}</button>
       </div>
 
       <div class="text-center">
-        <small class="text-muted">Нет аккаунта?</small>
-        <a href="{% url 'registration' %}" class="link-primary ms-1">Создать</a>
+        <small class="text-muted">{% trans 'Нет аккаунта?'%}</small>
+        <a href="{% url 'registration' %}" class="link-primary ms-1">{% trans 'Создать'%}</a>
       </div>
     </form>
   </div>

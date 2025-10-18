@@ -21,5 +21,5 @@ urlpatterns = [
     path('profile/', views.profile, name = 'profile'),
     path('toggle-theme/', views.toggle_theme, name='toggle_theme'),
     path('i18n/', include('django.conf.urls.i18n')),
-    path('get-doctors/', views.get_doctors_by_service, name='get_doctors_by_service'),
+    path('appointment/<int:pk>/update-status/', views.appointment_update_status, name='appointment_update_status'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
