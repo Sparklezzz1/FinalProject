@@ -1,5 +1,4 @@
 from django import template
-from django.contrib import admin
 from Voka.models.services import Direction
 from Voka.models.doctors import Doctors
 

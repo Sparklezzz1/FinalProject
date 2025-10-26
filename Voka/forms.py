@@ -1,12 +1,10 @@
 from django import forms
 from django.contrib.auth.models import User
-
 from Voka.models.doctors import Doctors 
 from .models.appointment import Appointment
 from .models.services import Services
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
-from datetime import time as dt_time, datetime
 
 class AppointmentForm(forms.ModelForm):
     date = forms.DateField(

@@ -78,7 +78,7 @@
           </a>
         </li>
 
-
+        {% if is_user_group %}
         <li class="nav-item dropdown ms-2">
   <form action="{% url 'set_language' %}" method="post" class="m-0 p-0">
     {% csrf_token %}
@@ -94,6 +94,7 @@
         {{ LANGUAGE_CODE|upper }}
       {% endif %}
     </button>
+    {% endif %}
     <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="languageDropdown">
       {% get_available_languages as LANGUAGES %}
       {% for lang_code, lang_name in LANGUAGES %}

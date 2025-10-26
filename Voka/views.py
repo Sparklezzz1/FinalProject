@@ -10,9 +10,7 @@ from .models.doctors import Doctors
 from .models.appointment import Appointment
 from .models.news import News
 from .forms import AppointmentForm, RegistrationForm, ServicesForm
-from django.http import JsonResponse
 from django.views.decorators.http import require_POST
-from django.utils import translation
 
 def get_menu():
     return [
@@ -64,8 +62,6 @@ def main_page(request):
     news_page = request.GET.get('news_page')
     news_page_obj = news_paginator.get_page(news_page)
 
-    is_user_group = request.user.groups.filter(name='Users').exists()
-
     return render(request, 'Voka/main_page.html', {
         'title': _('Главная страница'),
         'menu': get_menu,
@@ -75,8 +71,7 @@ def main_page(request):
         'YES': Doctors.Managers.YES,
         'sale_page_obj':sale_page_obj,
         'doctor_page_obj':doctor_page_obj,
-        'news_page_obj':news_page_obj,
-        'is_user_group':is_user_group,
+        'news_page_obj':news_page_obj, 
     })
 
 def services(request):
@@ -234,7 +229,6 @@ def news_detail(request,news_slug):
 
 @login_required
 def profile(request):
-    appointment_admin = Appointment.objects.all()
     appointment_user = Appointment.objects.filter(user=request.user)
     appointment_doctor = None
 
@@ -244,7 +238,6 @@ def profile(request):
     return render(request, 'Voka/profile.html', {
         'title': 'Профиль',
         'appointment_user': appointment_user,
-        'appointment_admin': appointment_admin,
         'appointment_doctor': appointment_doctor,
         'menu': get_menu,
     })
